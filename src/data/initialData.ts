@@ -21,7 +21,7 @@ export const INITIAL_STUDIO: Studio = {
   city: 'Pune',
   address: '402, Signature One, Senapati Bapat Road, Pune 411016',
   phone: '+91 98220 54321',
-  logoUrl: '/logo.svg',
+  logoUrl: '/logo.png',
   managerCanSeeAmounts: true,
 };
 
@@ -108,7 +108,20 @@ export const INITIAL_USERS: User[] = [
     trade: 'painting',
     assignedProjectIds: ['c2eebc99-9c0b-4ef8-bb6d-000000000001'],
     status: 'invited',
+    inviteCode: 'vijay-more',
     avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80',
+  },
+  {
+    id: 'b1eebc99-9c0b-4ef8-bb6d-000000000008',
+    studioId: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
+    name: 'Arun Shinde',
+    phone: '9850099999',
+    role: 'worker',
+    trade: 'carpentry',
+    assignedProjectIds: ['c2eebc99-9c0b-4ef8-bb6d-000000000001'],
+    status: 'deactivated',
+    pin: '8888',
+    avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
   },
 ];
 

@@ -73,7 +73,7 @@ export const SiteAppLayout: React.FC = () => {
                 <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
               </button>
             ) : (
-              <img src="/logo.svg" alt="Bestinterio" className="w-7 h-7 rounded-lg" />
+              <img src="/logo.png" alt="Bestinterio" className="w-8 h-8 object-contain aspect-square" />
             )}
             <div>
               <h1 className="font-serif text-base font-semibold text-ink leading-tight">

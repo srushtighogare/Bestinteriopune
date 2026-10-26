@@ -42,7 +42,7 @@ export const ConsoleLayout: React.FC = () => {
       {/* Mobile top bar */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-paper border-b border-line sticky top-0 z-40">
         <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="Bestinterio" className="w-8 h-8 rounded-lg shadow-sm" />
+          <img src="/logo.png" alt="Bestinterio" className="w-8 h-8 object-contain aspect-square" />
           <span className="font-serif text-lg font-medium text-ink">Bestinterio</span>
         </div>
         <div className="flex items-center gap-2">
@@ -74,7 +74,7 @@ export const ConsoleLayout: React.FC = () => {
         {/* Brand Header */}
         <div className="p-5 flex items-center justify-between border-b border-line/60">
           <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="Bestinterio" className="w-9 h-9 rounded-xl shadow-soft" />
+            <img src="/logo.png" alt="Bestinterio" className="w-9 h-9 object-contain aspect-square" />
             <div>
               <h1 className="font-serif text-xl font-medium tracking-tight text-ink leading-tight">Bestinterio</h1>
               <p className="text-[11px] uppercase tracking-wider text-muted font-sans font-medium">StudioOS</p>

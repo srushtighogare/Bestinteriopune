@@ -21,6 +21,7 @@ export interface User {
   lastActive?: string;
   avatarUrl?: string;
   pin?: string; // 4-digit PIN for site app
+  inviteCode?: string;
 }
 
 export interface Studio {

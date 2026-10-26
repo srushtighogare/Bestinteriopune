@@ -31,7 +31,7 @@ export const ProjectSummaryPage: React.FC = () => {
             <h1 className="font-serif text-2xl font-medium text-ink">Weekly Site Summary</h1>
             <p className="text-xs text-muted mt-1">Bestinterio · Project: {id}</p>
           </div>
-          <img src="/logo.svg" alt="Logo" className="w-10 h-10" />
+          <img src="/logo.png" alt="Bestinterio" className="w-14 h-14 object-contain aspect-square" />
         </div>
         <div className="py-12 text-center text-muted text-sm">
           Print-ready A4 Summary Sheet (Internal &amp; Customer versions) will be completed in Step 11.
