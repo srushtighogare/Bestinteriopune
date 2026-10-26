@@ -4,10 +4,11 @@ import { useAuth } from '../../context/AuthContext';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { switchUserRole } = useAuth();
+  const { switchUserRole, standardLogin } = useAuth();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    standardLogin();
     navigate('/');
   };
 

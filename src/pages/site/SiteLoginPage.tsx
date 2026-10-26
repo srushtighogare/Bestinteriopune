@@ -85,19 +85,19 @@ export const SiteLoginPage: React.FC = () => {
           <p className="text-xs text-muted mb-2">Demo: sign in as</p>
           <div className="flex flex-wrap justify-center gap-1.5">
             <button
-              onClick={() => { setCurrentUserById('user-supervisor'); navigate('/app'); }}
+              onClick={() => { setCurrentUserById('b1eebc99-9c0b-4ef8-bb6d-000000000003'); navigate('/app'); }}
               className="text-xs px-2.5 py-1 rounded-lg bg-sand/30 hover:bg-sand/60 text-ink"
             >
               Rajiv (Supervisor)
             </button>
             <button
-              onClick={() => { setCurrentUserById('user-carpenter'); navigate('/app'); }}
+              onClick={() => { setCurrentUserById('b1eebc99-9c0b-4ef8-bb6d-000000000004'); navigate('/app'); }}
               className="text-xs px-2.5 py-1 rounded-lg bg-sand/30 hover:bg-sand/60 text-ink"
             >
               Gurmukh (Carpenter)
             </button>
             <button
-              onClick={() => { setCurrentUserById('user-electrician'); navigate('/app'); }}
+              onClick={() => { setCurrentUserById('b1eebc99-9c0b-4ef8-bb6d-000000000005'); navigate('/app'); }}
               className="text-xs px-2.5 py-1 rounded-lg bg-sand/30 hover:bg-sand/60 text-ink"
             >
               Imran (Electrician)

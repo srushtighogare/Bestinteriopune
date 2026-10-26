@@ -38,7 +38,8 @@ export const progressService = {
     trade: TradeType,
     status: ProgressCellStatus,
     percentage: number,
-    authorName: string
+    authorName: string,
+    studioId?: string
   ): Promise<ScopeGridCell | null> {
     const allCells = getItem<ScopeGridCell[]>(STORAGE_KEYS.SCOPE_CELLS, []);
     const index = allCells.findIndex(
@@ -48,7 +49,8 @@ export const progressService = {
     const now = new Date().toISOString();
     if (index === -1) {
       const newCell: ScopeGridCell = {
-        id: `cell-${Date.now().toString(36)}`,
+        id: crypto.randomUUID(),
+        studioId: studioId || 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
         projectId,
         roomId,
         trade,
@@ -82,7 +84,7 @@ export const progressService = {
   async recordUpdate(input: RecordProgressUpdateInput): Promise<ProgressUpdate> {
     const updates = getItem<ProgressUpdate[]>(STORAGE_KEYS.PROGRESS_UPDATES, []);
     const newUpdate: ProgressUpdate = {
-      id: `upd-${Date.now().toString(36)}`,
+      id: crypto.randomUUID(),
       ...input,
       date: new Date().toISOString(),
     };
@@ -97,7 +99,8 @@ export const progressService = {
       input.trade,
       input.status,
       input.percentage,
-      input.authorName
+      input.authorName,
+      input.studioId
     );
 
     return newUpdate;
@@ -112,7 +115,7 @@ export const progressService = {
   async createIssue(input: CreateIssueInput): Promise<Issue> {
     const issues = getItem<Issue[]>(STORAGE_KEYS.ISSUES, []);
     const newIssue: Issue = {
-      id: `iss-${Date.now().toString(36)}`,
+      id: crypto.randomUUID(),
       studioId: input.studioId,
       projectId: input.projectId,
       roomId: input.roomId,

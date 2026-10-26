@@ -32,11 +32,12 @@ export const billsService = {
 
   async upload(input: CreateBillInput): Promise<Bill> {
     const bills = getItem<Bill[]>(STORAGE_KEYS.BILLS, []);
-    const billId = `bill-${Date.now().toString(36)}`;
+    const billId = crypto.randomUUID();
     
-    const items: BillItem[] = input.items.map((item, idx) => ({
+    const items: BillItem[] = input.items.map((item) => ({
       ...item,
-      id: `bi-${billId}-${idx}`,
+      id: crypto.randomUUID(),
+      studioId: input.studioId,
       billId,
     }));
 

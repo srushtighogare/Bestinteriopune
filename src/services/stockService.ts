@@ -67,7 +67,7 @@ export const stockService = {
   async recordReceived(input: RecordReceivedInput): Promise<StockMovement> {
     const movements = getItem<StockMovement[]>(STORAGE_KEYS.STOCK_MOVEMENTS, []);
     const newMovement: StockMovement = {
-      id: `mov-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 6)}`,
+      id: crypto.randomUUID(),
       studioId: input.studioId,
       projectId: input.projectId,
       materialId: input.materialId,
@@ -87,7 +87,7 @@ export const stockService = {
   async recordUsed(input: RecordUsedInput): Promise<StockMovement> {
     const movements = getItem<StockMovement[]>(STORAGE_KEYS.STOCK_MOVEMENTS, []);
     const newMovement: StockMovement = {
-      id: `mov-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 6)}`,
+      id: crypto.randomUUID(),
       studioId: input.studioId,
       projectId: input.projectId,
       materialId: input.materialId,
@@ -109,7 +109,7 @@ export const stockService = {
   async recordAdjustment(input: RecordAdjustmentInput): Promise<StockMovement> {
     const movements = getItem<StockMovement[]>(STORAGE_KEYS.STOCK_MOVEMENTS, []);
     const newMovement: StockMovement = {
-      id: `mov-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 6)}`,
+      id: crypto.randomUUID(),
       studioId: input.studioId,
       projectId: input.projectId,
       materialId: input.materialId,

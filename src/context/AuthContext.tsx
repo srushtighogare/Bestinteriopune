@@ -6,8 +6,10 @@ import { getItem, setItem, STORAGE_KEYS } from '../services/storage';
 interface AuthContextType {
   currentUser: User | null;
   role: UserRole;
-  setCurrentUserById: (userId: string) => Promise<void>;
+  isDemoMode: boolean;
+  setCurrentUserById: (userId: string, asDemo?: boolean) => Promise<void>;
   switchUserRole: (role: UserRole) => Promise<void>;
+  standardLogin: () => void;
   logout: () => void;
   isLoading: boolean;
 }
@@ -16,10 +18,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isDemoMode, setIsDemoMode] = useState<boolean>(() => {
+    return getItem<boolean>('studioos_is_demo_mode', false);
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   const loadUser = async () => {
-    const userId = getItem<string>(STORAGE_KEYS.CURRENT_USER_ID, 'user-owner');
+    const userId = getItem<string>(STORAGE_KEYS.CURRENT_USER_ID, 'b1eebc99-9c0b-4ef8-bb6d-000000000001');
     const user = await teamService.get(userId);
     if (user) {
       setCurrentUser(user);
@@ -30,6 +35,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setItem(STORAGE_KEYS.CURRENT_USER_ID, all[0].id);
       }
     }
+    setIsDemoMode(getItem<boolean>('studioos_is_demo_mode', false));
     setIsLoading(false);
   };
 
@@ -46,11 +52,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
-  const setCurrentUserById = async (userId: string) => {
+  const setCurrentUserById = async (userId: string, asDemo = true) => {
     const user = await teamService.get(userId);
     if (user) {
       setCurrentUser(user);
       setItem(STORAGE_KEYS.CURRENT_USER_ID, user.id);
+      setIsDemoMode(asDemo);
+      setItem('studioos_is_demo_mode', asDemo);
     }
   };
 
@@ -58,13 +66,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const users = await teamService.list();
     const match = users.find(u => u.role === targetRole);
     if (match) {
-      await setCurrentUserById(match.id);
+      await setCurrentUserById(match.id, true);
     }
   };
 
+  const standardLogin = () => {
+    setIsDemoMode(false);
+    setItem('studioos_is_demo_mode', false);
+  };
+
   const logout = () => {
-    // In demo mode, reset to owner or null
     setItem(STORAGE_KEYS.CURRENT_USER_ID, '');
+    setItem('studioos_is_demo_mode', false);
+    setIsDemoMode(false);
     setCurrentUser(null);
   };
 
@@ -75,8 +89,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         currentUser,
         role,
+        isDemoMode,
         setCurrentUserById,
         switchUserRole,
+        standardLogin,
         logout,
         isLoading,
       }}

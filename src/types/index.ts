@@ -36,6 +36,8 @@ export interface Studio {
 
 export interface Room {
   id: string;
+  studioId: string;
+  projectId: string;
   name: string;
   order: number;
 }
@@ -65,6 +67,7 @@ export type ProgressCellStatus = 'not_started' | 'in_progress' | 'done';
 
 export interface ScopeGridCell {
   id: string;
+  studioId: string;
   projectId: string;
   roomId: string;
   trade: TradeType;
@@ -76,6 +79,7 @@ export interface ScopeGridCell {
 
 export interface Category {
   id: string;
+  studioId: string;
   name: string;
   order: number;
   trade?: TradeType;
@@ -114,6 +118,7 @@ export type BillStatus = 'to_review' | 'reviewed';
 
 export interface BillItem {
   id: string;
+  studioId: string;
   billId: string;
   materialId: string;
   materialName: string;

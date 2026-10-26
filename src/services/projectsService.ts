@@ -14,7 +14,7 @@ export const projectsService = {
 
   async create(projectData: Omit<Project, 'id'>, cells?: ScopeGridCell[]): Promise<Project> {
     const projects = await this.list();
-    const newId = `proj-${Date.now().toString(36)}`;
+    const newId = crypto.randomUUID();
     const newProject: Project = {
       ...projectData,
       id: newId,
@@ -27,7 +27,8 @@ export const projectsService = {
       const allCells = getItem<ScopeGridCell[]>(STORAGE_KEYS.SCOPE_CELLS, []);
       const mappedCells = cells.map(c => ({
         ...c,
-        id: `cell-${Math.random().toString(36).substring(2, 9)}`,
+        id: crypto.randomUUID(),
+        studioId: projectData.studioId,
         projectId: newId,
       }));
       setItem(STORAGE_KEYS.SCOPE_CELLS, [...allCells, ...mappedCells]);

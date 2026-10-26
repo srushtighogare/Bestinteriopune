@@ -41,7 +41,7 @@ export const STORAGE_KEYS = {
   CURRENT_USER_ID: 'studioos_current_user_id',
 } as const;
 
-const CURRENT_DATA_VERSION = 'v1.1_bestinterio_megha';
+const CURRENT_DATA_VERSION = 'v1.2_uuids_bestinterio';
 
 export function getItem<T>(key: string, fallback: T): T {
   try {
@@ -84,7 +84,7 @@ export function initializeStorage(forceReset = false): void {
     localStorage.setItem(STORAGE_KEYS.PROGRESS_UPDATES, JSON.stringify(INITIAL_PROGRESS_UPDATES));
     localStorage.setItem(STORAGE_KEYS.ISSUES, JSON.stringify(INITIAL_ISSUES));
 
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER_ID, 'user-owner');
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER_ID, 'b1eebc99-9c0b-4ef8-bb6d-000000000001');
 
     window.dispatchEvent(new CustomEvent('studioos_storage_reset'));
   }

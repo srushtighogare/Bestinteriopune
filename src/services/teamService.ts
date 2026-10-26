@@ -21,7 +21,7 @@ export const teamService = {
     const users = await this.list();
     const newUser: User = {
       ...userData,
-      id: `user-${Date.now().toString(36)}`,
+      id: crypto.randomUUID(),
     };
 
     users.push(newUser);
