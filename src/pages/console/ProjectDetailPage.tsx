@@ -348,8 +348,9 @@ export const ProjectDetailPage: React.FC = () => {
     );
   }
 
-  const isDelayed = project ? project.status !== 'completed' && project.status !== 'on_hold' && new Date(project.targetDate).getTime() < new Date().setHours(0,0,0,0) : false;
-  const isNeedsAttention = daysSinceUpdate !== null && daysSinceUpdate >= 3;
+  const hasNoUpdates = updates.length === 0;
+  const isDelayed = !hasNoUpdates && project ? project.status !== 'completed' && project.status !== 'on_hold' && new Date(project.targetDate).getTime() < new Date().setHours(0,0,0,0) : false;
+  const isNeedsAttention = !hasNoUpdates && daysSinceUpdate !== null && daysSinceUpdate >= 3;
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto pb-16">
@@ -390,7 +391,12 @@ export const ProjectDetailPage: React.FC = () => {
 
             {/* Status chip top right */}
             <div className="absolute top-4 right-4">
-              {project.status === 'on_hold' ? (
+              {hasNoUpdates && project.status !== 'completed' && project.status !== 'on_hold' ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-sand text-ink-2 border border-line shadow-xs">
+                  <span className="w-2 h-2 rounded-full bg-sand-dark" />
+                  <span>Not started yet</span>
+                </span>
+              ) : project.status === 'on_hold' ? (
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-sand text-ink-2 border border-line shadow-xs">
                   <span>On hold</span>
                 </span>

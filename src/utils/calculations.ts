@@ -231,8 +231,11 @@ export function computeAttentionItems(
     }
   }
 
-  // 3. Sites with no update in 3+ days
+  // 3. Sites with no update in 3+ days (only for active projects that have started logging updates)
   activeProjects.forEach(proj => {
+    const projectUpdates = updates.filter(u => u.projectId === proj.id);
+    if (projectUpdates.length === 0) return; // New project with no updates yet must not trigger alert
+
     const days = computeDaysSinceLastUpdate(proj.id, updates, now);
     if (days !== null && days >= 3) {
       items.push({

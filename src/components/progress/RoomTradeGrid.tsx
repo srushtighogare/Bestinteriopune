@@ -337,7 +337,7 @@ export const RoomTradeGrid: React.FC<RoomTradeGridProps> = ({
           <div className="space-y-4">
             {updates.length === 0 ? (
               <div className="p-8 text-center text-sm text-muted bg-ivory/50 rounded-xl border border-line">
-                No updates logged for this project yet.
+                No updates yet — updates from the site will appear here
               </div>
             ) : (
               <div className="space-y-4">

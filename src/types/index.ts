@@ -94,6 +94,7 @@ export interface Material {
   shadeCode?: string;
   unit: string;
   lowStockThreshold: number;
+  rate?: number; // Estimated / default unit rate (₹)
 }
 
 export type StockMovementType = 'received' | 'used' | 'adjustment';

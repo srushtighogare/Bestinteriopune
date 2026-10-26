@@ -571,14 +571,6 @@ export const NewProjectPage: React.FC = () => {
         alert('Please enter a project name.');
         return;
       }
-      if (!customerName.trim()) {
-        alert('Please enter customer name.');
-        return;
-      }
-      if (!address.trim()) {
-        alert('Please enter site address.');
-        return;
-      }
     } else if (currentStep === 2) {
       if (rooms.length === 0) {
         alert('Please add at least one room.');
@@ -954,7 +946,7 @@ export const NewProjectPage: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-medium text-ink block mb-1">
-                    Customer name <span className="text-rust">*</span>
+                    Customer name <span className="text-muted font-normal">(optional)</span>
                   </label>
                   <input
                     type="text"
@@ -967,7 +959,7 @@ export const NewProjectPage: React.FC = () => {
 
                 <div>
                   <label className="text-xs font-medium text-ink block mb-1">
-                    Site address / Location <span className="text-rust">*</span>
+                    Site address / Location <span className="text-muted font-normal">(optional)</span>
                   </label>
                   <input
                     type="text"

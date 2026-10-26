@@ -302,8 +302,9 @@ export const ProjectsPage: React.FC = () => {
               supervisor: null,
             };
 
-            const isDelayed = project.status !== 'completed' && project.status !== 'on_hold' && new Date(project.targetDate).getTime() < new Date().setHours(0,0,0,0);
-            const isNeedsAttention = stats.daysSinceUpdate !== null && stats.daysSinceUpdate >= 3;
+            const hasNoUpdates = stats.lastUpdate === null;
+            const isDelayed = !hasNoUpdates && project.status !== 'completed' && project.status !== 'on_hold' && new Date(project.targetDate).getTime() < new Date().setHours(0,0,0,0);
+            const isNeedsAttention = !hasNoUpdates && stats.daysSinceUpdate !== null && stats.daysSinceUpdate >= 3;
 
             return (
               <div
@@ -329,6 +330,10 @@ export const ProjectsPage: React.FC = () => {
                     ) : project.status === 'completed' ? (
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-olive-soft text-olive border border-olive/30 shadow-xs">
                         <span>Completed</span>
+                      </span>
+                    ) : hasNoUpdates ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-sand text-ink-2 border border-line shadow-xs">
+                        <span>Not started yet</span>
                       </span>
                     ) : isDelayed ? (
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-rust-soft text-rust border border-rust/40 shadow-xs">
@@ -456,8 +461,9 @@ export const ProjectsPage: React.FC = () => {
                     supervisor: null,
                   };
 
-                  const isDelayed = project.status === 'active' && new Date(project.targetDate).getTime() < new Date().setHours(0,0,0,0);
-                  const isNeedsAttention = stats.daysSinceUpdate !== null && stats.daysSinceUpdate >= 3;
+                  const hasNoUpdates = stats.lastUpdate === null;
+                  const isDelayed = !hasNoUpdates && project.status === 'active' && new Date(project.targetDate).getTime() < new Date().setHours(0,0,0,0);
+                  const isNeedsAttention = !hasNoUpdates && stats.daysSinceUpdate !== null && stats.daysSinceUpdate >= 3;
 
                   return (
                     <tr 
@@ -552,6 +558,10 @@ export const ProjectsPage: React.FC = () => {
                         ) : project.status === 'completed' ? (
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-olive-soft text-olive">
                             Completed
+                          </span>
+                        ) : hasNoUpdates ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-sand text-ink-2">
+                            Not started yet
                           </span>
                         ) : isDelayed ? (
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-rust-soft text-rust">

@@ -204,21 +204,25 @@ export const HomePage: React.FC = () => {
 
   // 3. Project progress & spend map per project
   const projectStats = useMemo(() => {
-    const stats = new Map<string, { progress: number; spend: number; daysSinceUpdate: number | null; statusType: 'on_track' | 'needs_attention' | 'delayed' }>();
+    const stats = new Map<string, { progress: number; spend: number; daysSinceUpdate: number | null; statusType: 'on_track' | 'needs_attention' | 'delayed' | 'not_started_yet' }>();
 
     activeProjects.forEach(proj => {
       const projCells = allCells.filter(c => c.projectId === proj.id);
       const progress = computeProjectProgress(projCells);
       const spend = computeProjectSpend(bills, proj.id);
       const days = computeDaysSinceLastUpdate(proj.id, updates);
+      const projectUpdates = updates.filter(u => u.projectId === proj.id);
 
       // Determine operational status
-      let statusType: 'on_track' | 'needs_attention' | 'delayed' = 'on_track';
+      let statusType: 'on_track' | 'needs_attention' | 'delayed' | 'not_started_yet' = 'on_track';
+      const hasNoUpdates = projectUpdates.length === 0;
       const isPastTarget = new Date(proj.targetDate).getTime() < new Date().setHours(0,0,0,0);
       const hasStale = days !== null && days >= 3;
       const hasAttention = attentionItems.some(item => item.projectId === proj.id);
 
-      if (isPastTarget) {
+      if (hasNoUpdates) {
+        statusType = 'not_started_yet';
+      } else if (isPastTarget) {
         statusType = 'delayed';
       } else if (hasStale || hasAttention) {
         statusType = 'needs_attention';
@@ -528,7 +532,11 @@ export const HomePage: React.FC = () => {
 
                       {/* Status Chip */}
                       <div className="absolute top-3 right-3">
-                        {stats.statusType === 'delayed' ? (
+                        {stats.statusType === 'not_started_yet' ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-sand text-ink-2 border border-line shadow-xs">
+                            <span>Not started yet</span>
+                          </span>
+                        ) : stats.statusType === 'delayed' ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-rust-soft text-rust border border-rust/40 shadow-xs">
                             <span className="w-1.5 h-1.5 rounded-full bg-rust" />
                             <span>Delayed</span>
