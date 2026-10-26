@@ -9,7 +9,8 @@ import {
   StockMovement 
 } from '../types';
 
-export const TODAY_BASELINE = new Date('2026-10-26T16:00:00.000Z');
+export const TODAY_BASELINE = new Date();
+export const getTodayBaseline = (): Date => new Date();
 
 /**
  * Computes the stock balance for a material at a specific site (or across all sites).
@@ -131,7 +132,7 @@ export function computeDaysSinceLastUpdate(
 
 export interface AttentionItem {
   id: string;
-  type: 'out_of_stock' | 'stale_site' | 'bills_review' | 'overused';
+  type: 'out_of_stock' | 'stale_site' | 'bills_review' | 'overused' | 'running_low';
   text: string;
   link: string;
   projectId?: string;
@@ -140,7 +141,7 @@ export interface AttentionItem {
 
 /**
  * Generates the "Needs your attention" list for the Owner's Home view
- * strictly using plain language rules from Section 7.
+ * strictly using plain language rules from Section 7 and matching all cards.
  */
 export function computeAttentionItems(
   projects: Project[],
@@ -148,7 +149,7 @@ export function computeAttentionItems(
   movements: StockMovement[],
   bills: Bill[],
   updates: ProgressUpdate[],
-  now: Date = TODAY_BASELINE
+  now: Date = new Date()
 ): AttentionItem[] {
   const items: AttentionItem[] = [];
   const activeProjects = projects.filter(p => p.status === 'active');
@@ -189,7 +190,48 @@ export function computeAttentionItems(
     });
   });
 
-  // 2. Sites with no update in 3+ days
+  // 2. Running low items per active project (grouped if > 3)
+  const runningLowItems: {
+    material: Material;
+    project: Project;
+    balance: MaterialStockBalance;
+  }[] = [];
+
+  activeProjects.forEach(proj => {
+    materials.forEach(mat => {
+      const balance = computeMaterialStockBalance(mat, movements, proj.id);
+      if (balance.status === 'running_low') {
+        runningLowItems.push({ material: mat, project: proj, balance });
+      }
+    });
+  });
+
+  if (runningLowItems.length > 0) {
+    if (runningLowItems.length > 3) {
+      const distinctSites = new Set(runningLowItems.map(i => i.project.id)).size;
+      items.push({
+        id: 'running-low-grouped-alert',
+        type: 'running_low',
+        text: `${runningLowItems.length} items are running low across ${distinctSites} site${distinctSites > 1 ? 's' : ''}`,
+        link: '/inventory?filter=running_low',
+        severity: 'amber',
+      });
+    } else {
+      runningLowItems.forEach(item => {
+        const shade = item.material.shadeCode ? ` (${item.material.shadeCode})` : '';
+        items.push({
+          id: `low-${item.project.id}-${item.material.id}`,
+          type: 'running_low',
+          text: `${item.material.name}${shade} is running low at ${item.project.name} (${item.balance.inStock} ${item.material.unit} left)`,
+          link: `/projects/${item.project.id}?tab=inventory`,
+          projectId: item.project.id,
+          severity: 'amber',
+        });
+      });
+    }
+  }
+
+  // 3. Sites with no update in 3+ days
   activeProjects.forEach(proj => {
     const days = computeDaysSinceLastUpdate(proj.id, updates, now);
     if (days !== null && days >= 3) {
@@ -204,7 +246,7 @@ export function computeAttentionItems(
     }
   });
 
-  // 3. Bills waiting for review
+  // 4. Bills waiting for review
   const pendingBills = bills.filter(b => b.status === 'to_review');
   if (pendingBills.length > 0) {
     items.push({
@@ -242,11 +284,11 @@ export function computeItemsRunningLowCount(
 
 /**
  * Formats a timestamp into relative plain-language time
- * against the October 2026 baseline.
+ * against the current date.
  */
 export function formatRelativeTime(
   dateInput: string | Date,
-  baseline: Date = TODAY_BASELINE
+  baseline: Date = new Date()
 ): string {
   const d = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
   const diffMs = baseline.getTime() - d.getTime();
@@ -256,8 +298,16 @@ export function formatRelativeTime(
 
   if (diffMinutes < 1) return 'Just now';
   if (diffMinutes < 60) return `${diffMinutes}m ago`;
-  if (diffHours < 24 && d.getDate() === baseline.getDate()) return `${diffHours}h ago`;
-  if (diffDays === 1 || (diffHours < 36 && d.getDate() === baseline.getDate() - 1)) return 'Yesterday';
+  
+  // Check if calendar yesterday
+  const yesterday = new Date(baseline);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const isYesterday = d.toDateString() === yesterday.toDateString();
+  if (isYesterday) return 'Yesterday';
+
+  const isToday = d.toDateString() === baseline.toDateString();
+  if (isToday) return `${diffHours}h ago`;
+
   if (diffDays < 7) return `${diffDays}d ago`;
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

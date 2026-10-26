@@ -1,15 +1,6 @@
 import {
-  INITIAL_BILLS,
-  INITIAL_CATEGORIES,
-  INITIAL_ISSUES,
-  INITIAL_MATERIALS,
-  INITIAL_PROGRESS_UPDATES,
-  INITIAL_PROJECTS,
-  INITIAL_SCOPE_CELLS,
-  INITIAL_STOCK_MOVEMENTS,
+  generateInitialData,
   INITIAL_STUDIO,
-  INITIAL_USERS,
-  INITIAL_VENDORS,
 } from '../data/initialData';
 import {
   Bill,
@@ -41,7 +32,7 @@ export const STORAGE_KEYS = {
   CURRENT_USER_ID: 'studioos_current_user_id',
 } as const;
 
-const CURRENT_DATA_VERSION = 'v1.4_step3_home';
+const CURRENT_DATA_VERSION = 'v1.5_step3_dynamic_spend_dates';
 
 export function getItem<T>(key: string, fallback: T): T {
   try {
@@ -71,18 +62,20 @@ export function initializeStorage(forceReset = false): void {
   const version = localStorage.getItem(STORAGE_KEYS.VERSION);
   const isInitialized = localStorage.getItem(STORAGE_KEYS.STUDIO);
   if (!isInitialized || version !== CURRENT_DATA_VERSION || forceReset) {
+    const freshData = generateInitialData(new Date());
+
     localStorage.setItem(STORAGE_KEYS.VERSION, CURRENT_DATA_VERSION);
-    localStorage.setItem(STORAGE_KEYS.STUDIO, JSON.stringify(INITIAL_STUDIO));
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(INITIAL_USERS));
-    localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(INITIAL_PROJECTS));
-    localStorage.setItem(STORAGE_KEYS.SCOPE_CELLS, JSON.stringify(INITIAL_SCOPE_CELLS));
-    localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(INITIAL_CATEGORIES));
-    localStorage.setItem(STORAGE_KEYS.MATERIALS, JSON.stringify(INITIAL_MATERIALS));
-    localStorage.setItem(STORAGE_KEYS.VENDORS, JSON.stringify(INITIAL_VENDORS));
-    localStorage.setItem(STORAGE_KEYS.STOCK_MOVEMENTS, JSON.stringify(INITIAL_STOCK_MOVEMENTS));
-    localStorage.setItem(STORAGE_KEYS.BILLS, JSON.stringify(INITIAL_BILLS));
-    localStorage.setItem(STORAGE_KEYS.PROGRESS_UPDATES, JSON.stringify(INITIAL_PROGRESS_UPDATES));
-    localStorage.setItem(STORAGE_KEYS.ISSUES, JSON.stringify(INITIAL_ISSUES));
+    localStorage.setItem(STORAGE_KEYS.STUDIO, JSON.stringify(freshData.studio));
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(freshData.users));
+    localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(freshData.projects));
+    localStorage.setItem(STORAGE_KEYS.SCOPE_CELLS, JSON.stringify(freshData.scopeCells));
+    localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(freshData.categories));
+    localStorage.setItem(STORAGE_KEYS.MATERIALS, JSON.stringify(freshData.materials));
+    localStorage.setItem(STORAGE_KEYS.VENDORS, JSON.stringify(freshData.vendors));
+    localStorage.setItem(STORAGE_KEYS.STOCK_MOVEMENTS, JSON.stringify(freshData.stockMovements));
+    localStorage.setItem(STORAGE_KEYS.BILLS, JSON.stringify(freshData.bills));
+    localStorage.setItem(STORAGE_KEYS.PROGRESS_UPDATES, JSON.stringify(freshData.progressUpdates));
+    localStorage.setItem(STORAGE_KEYS.ISSUES, JSON.stringify(freshData.issues));
 
     localStorage.setItem(STORAGE_KEYS.CURRENT_USER_ID, 'b1eebc99-9c0b-4ef8-bb6d-000000000001');
 

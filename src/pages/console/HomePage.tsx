@@ -40,7 +40,6 @@ import {
   computeProjectSpend, 
   formatCurrencyINR, 
   formatRelativeTime, 
-  TODAY_BASELINE,
   AttentionItem 
 } from '../../utils/calculations';
 
@@ -53,6 +52,24 @@ interface ActivityItem {
   projectName: string;
   projectId: string;
   photoUrl?: string;
+}
+
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning';
+  if (hour < 17) return 'Good afternoon';
+  return 'Good evening';
+}
+
+function getFormattedTodayDate(): string {
+  const today = new Date();
+  const formatted = new Intl.DateTimeFormat('en-IN', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(today);
+  return `${formatted} · Pune`;
 }
 
 export const HomePage: React.FC = () => {
@@ -148,16 +165,20 @@ export const HomePage: React.FC = () => {
     return bills.filter(b => b.status === 'to_review').length;
   }, [bills]);
 
-  const staleSitesCount = useMemo(() => {
-    return activeProjects.filter(p => {
-      const days = computeDaysSinceLastUpdate(p.id, updates, TODAY_BASELINE);
-      return days !== null && days >= 3;
-    }).length;
+  const staleProjects = useMemo(() => {
+    return activeProjects
+      .map(p => ({
+        project: p,
+        days: computeDaysSinceLastUpdate(p.id, updates)
+      }))
+      .filter((item): item is { project: Project; days: number } => item.days !== null && item.days >= 3);
   }, [activeProjects, updates]);
+
+  const staleSitesCount = staleProjects.length;
 
   // 2. Needs your attention list (strictly plain language from Section 7 & 5.1)
   const attentionItems: AttentionItem[] = useMemo(() => {
-    return computeAttentionItems(projects, materials, movements, bills, updates, TODAY_BASELINE);
+    return computeAttentionItems(projects, materials, movements, bills, updates);
   }, [projects, materials, movements, bills, updates]);
 
   // Map of team members by id for quick avatar/name lookup
@@ -189,7 +210,7 @@ export const HomePage: React.FC = () => {
       const projCells = allCells.filter(c => c.projectId === proj.id);
       const progress = computeProjectProgress(projCells);
       const spend = computeProjectSpend(bills, proj.id);
-      const days = computeDaysSinceLastUpdate(proj.id, updates, TODAY_BASELINE);
+      const days = computeDaysSinceLastUpdate(proj.id, updates);
 
       // Determine operational status
       let statusType: 'on_track' | 'needs_attention' | 'delayed' = 'on_track';
@@ -285,10 +306,10 @@ export const HomePage: React.FC = () => {
       <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-line pb-6">
         <div>
           <h1 className="font-serif text-3xl font-medium text-ink tracking-tight">
-            Good morning, {userName}
+            {getGreeting()}, {userName}
           </h1>
           <p className="text-sm text-muted mt-1 font-sans">
-            Monday, 26 October 2026 · Pune
+            {getFormattedTodayDate()}
           </p>
         </div>
         <div className="flex items-center">
@@ -325,7 +346,7 @@ export const HomePage: React.FC = () => {
 
         {/* Card 2: Items running low */}
         <div 
-          onClick={() => navigate('/inventory')}
+          onClick={() => navigate('/inventory?filter=running_low')}
           className="p-5 rounded-card bg-paper border border-line hover:border-sand-dark transition-all cursor-pointer group shadow-xs"
         >
           <div className="flex items-center justify-between">
@@ -364,12 +385,11 @@ export const HomePage: React.FC = () => {
         {/* Card 4: Sites with no update in 3+ days */}
         <div 
           onClick={() => {
-            const stale = activeProjects.find(p => {
-              const days = computeDaysSinceLastUpdate(p.id, updates, TODAY_BASELINE);
-              return days !== null && days >= 3;
-            });
-            if (stale) navigate(`/projects/${stale.id}?tab=progress`);
-            else navigate('/projects');
+            if (staleProjects.length > 0) {
+              navigate(`/projects/${staleProjects[0].project.id}?tab=progress`);
+            } else {
+              navigate('/projects');
+            }
           }}
           className="p-5 rounded-card bg-paper border border-line hover:border-sand-dark transition-all cursor-pointer group shadow-xs"
         >
@@ -383,7 +403,7 @@ export const HomePage: React.FC = () => {
             {isLoading ? '—' : staleSitesCount}
           </span>
           <span className="text-xs text-muted mt-1 block">
-            {staleSitesCount > 0 ? 'Kharadi Office (4 days)' : 'All sites up to date'}
+            {staleSitesCount > 0 ? `${staleProjects[0].project.name} (${staleProjects[0].days} days)` : 'All sites up to date'}
           </span>
         </div>
       </section>
@@ -437,6 +457,7 @@ export const HomePage: React.FC = () => {
                           <div className={`p-1.5 rounded-lg shrink-0 ${isRust ? 'bg-rust/10 text-rust' : 'bg-amber/10 text-amber'}`}>
                             {item.type === 'out_of_stock' && <AlertCircle className="w-4 h-4" strokeWidth={1.75} />}
                             {item.type === 'overused' && <AlertTriangle className="w-4 h-4" strokeWidth={1.75} />}
+                            {item.type === 'running_low' && <TrendingDown className="w-4 h-4" strokeWidth={1.75} />}
                             {item.type === 'stale_site' && <Clock className="w-4 h-4" strokeWidth={1.75} />}
                             {item.type === 'bills_review' && <FileText className="w-4 h-4" strokeWidth={1.75} />}
                           </div>
@@ -572,7 +593,7 @@ export const HomePage: React.FC = () => {
                           <Calendar className="w-3.5 h-3.5 shrink-0" strokeWidth={1.5} />
                           <span className="truncate">
                             {latestUpdate 
-                              ? `Updated ${formatRelativeTime(latestUpdate.date, TODAY_BASELINE)} by ${latestUpdate.authorName.split(' ')[0]}`
+                              ? `Updated ${formatRelativeTime(latestUpdate.date)} by ${latestUpdate.authorName.split(' ')[0]}`
                               : 'No updates recorded yet'}
                           </span>
                         </div>
@@ -628,7 +649,7 @@ export const HomePage: React.FC = () => {
                       </p>
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-[11px] text-muted tabular-nums">
-                          {formatRelativeTime(act.date, TODAY_BASELINE)}
+                          {formatRelativeTime(act.date)}
                         </span>
                         <span className="text-[10px] text-muted font-medium bg-sand/60 px-1.5 py-0.5 rounded">
                           {act.projectName}
