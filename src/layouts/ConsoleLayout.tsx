@@ -42,8 +42,8 @@ export const ConsoleLayout: React.FC = () => {
       {/* Mobile top bar */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-paper border-b border-line sticky top-0 z-40">
         <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="Studio Svara" className="w-8 h-8 rounded-lg shadow-sm" />
-          <span className="font-serif text-lg font-medium text-ink">Studio Svara</span>
+          <img src="/logo.svg" alt="Bestinterio" className="w-8 h-8 rounded-lg shadow-sm" />
+          <span className="font-serif text-lg font-medium text-ink">Bestinterio</span>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -74,9 +74,9 @@ export const ConsoleLayout: React.FC = () => {
         {/* Brand Header */}
         <div className="p-5 flex items-center justify-between border-b border-line/60">
           <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="Studio Svara" className="w-9 h-9 rounded-xl shadow-soft" />
+            <img src="/logo.svg" alt="Bestinterio" className="w-9 h-9 rounded-xl shadow-soft" />
             <div>
-              <h1 className="font-serif text-xl font-medium tracking-tight text-ink leading-tight">Studio Svara</h1>
+              <h1 className="font-serif text-xl font-medium tracking-tight text-ink leading-tight">Bestinterio</h1>
               <p className="text-[11px] uppercase tracking-wider text-muted font-sans font-medium">StudioOS</p>
             </div>
           </div>
@@ -147,7 +147,7 @@ export const ConsoleLayout: React.FC = () => {
                 className="w-8 h-8 rounded-full object-cover border border-line shrink-0"
               />
               <div className="min-w-0">
-                <p className="text-xs font-medium text-ink truncate">{currentUser?.name || "Srushti Ghogare"}</p>
+                <p className="text-xs font-medium text-ink truncate">{currentUser?.name || "Megha Jadhav"}</p>
                 <p className="text-[10px] uppercase tracking-wider text-muted font-medium capitalize">
                   {currentUser?.role || role}
                 </p>

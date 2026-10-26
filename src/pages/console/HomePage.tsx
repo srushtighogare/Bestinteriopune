@@ -13,7 +13,7 @@ export const HomePage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-line pb-6">
         <div>
           <h1 className="font-serif text-3xl font-medium text-ink tracking-tight">
-            Good morning, {currentUser?.name?.split(' ')[0] || 'Srushti'}
+            Good morning, {currentUser?.name?.split(' ')[0] || 'Megha'}
           </h1>
           <p className="text-sm text-muted mt-1 font-sans">
             Monday, 26 October 2026 · Pune

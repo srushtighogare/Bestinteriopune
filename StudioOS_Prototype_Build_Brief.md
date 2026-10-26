@@ -10,9 +10,9 @@
 
 ## 1. Role and goal
 
-You are a senior product designer and front-end engineer. Build a **high-fidelity, clickable prototype** of **StudioOS**, a private operations system for **Studio Svara**, an interior design studio in Pune.
+You are a senior product designer and front-end engineer. Build a **high-fidelity, clickable prototype** of **StudioOS**, a private operations system for **Bestinterio**, an interior design studio in Pune.
 
-It will be shown to the studio owner, **Srushti Ghogare**, in a client meeting — as screenshots and as a live click-through on a laptop and a phone. It must feel like **her studio's own system**: elegant, calm, premium, made for an interior designer — not a generic admin template or an accounting ERP.
+It will be shown to the studio owner, **Megha Jadhav**, in a client meeting — as screenshots and as a live click-through on a laptop and a phone. It must feel like **her studio's own system**: elegant, calm, premium, made for an interior designer — not a generic admin template or an accounting ERP.
 
 The system covers exactly three areas, plus setup and login:
 1. **Inventory** — material received and used, per site, by category → material.
@@ -43,7 +43,7 @@ Two experiences:
 
 **Personalisation**
 - Studio logo (`/logo.svg`) top-left of the console sidebar, on the login screen, in the site app header, on PDF summaries, and as the PWA icon.
-- Studio name used in page titles, greetings and the PDF header: e.g. "Good morning, Srushti" and "Studio Svara · StudioOS".
+- Studio name used in page titles, greetings and the PDF header: e.g. "Good morning, Megha" and "Bestinterio · StudioOS".
 - If the logo has a strong brand colour, use it as the **accent** in place of olive below, keeping everything else neutral.
 
 **Colour tokens** (define as CSS variables / Tailwind theme):
@@ -136,4 +136,4 @@ Layout: Left sidebar (240px, collapsible to icons on tablet), content area max-w
 ## 8. Mock data (realistic, internally consistent)
 
 All dates around **October 2026** (today = 26 Oct 2026).
-Studio: Studio Svara, Pune. Owner: Srushti Ghogare. Manager: Neha Kulkarni.
+**Studio:** Bestinterio, Pune. Owner: Megha Jadhav. Manager: Neha Kulkarni.

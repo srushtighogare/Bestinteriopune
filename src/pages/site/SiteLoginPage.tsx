@@ -36,7 +36,7 @@ export const SiteLoginPage: React.FC = () => {
       </div>
 
       <div className="text-center space-y-6">
-        <img src="/logo.svg" alt="Studio Svara" className="w-12 h-12 mx-auto rounded-2xl" />
+        <img src="/logo.svg" alt="Bestinterio" className="w-12 h-12 mx-auto rounded-2xl" />
         <div>
           <h1 className="font-serif text-2xl font-medium text-ink">Welcome back</h1>
           <p className="text-xs text-muted mt-1">Enter your 4-digit PIN</p>

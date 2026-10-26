@@ -73,11 +73,11 @@ export const SiteAppLayout: React.FC = () => {
                 <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
               </button>
             ) : (
-              <img src="/logo.svg" alt="Studio Svara" className="w-7 h-7 rounded-lg" />
+              <img src="/logo.svg" alt="Bestinterio" className="w-7 h-7 rounded-lg" />
             )}
             <div>
               <h1 className="font-serif text-base font-semibold text-ink leading-tight">
-                {isSubpage ? 'Site Action' : 'Studio Svara'}
+                {isSubpage ? 'Site Action' : 'Bestinterio'}
               </h1>
               <p className="text-[11px] text-muted leading-tight font-medium">
                 {currentUser?.name ? `Hi ${currentUser.name.split(' ')[0]}` : 'Site Operations'}

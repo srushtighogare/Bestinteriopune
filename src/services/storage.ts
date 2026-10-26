@@ -26,6 +26,7 @@ import {
 } from '../types';
 
 export const STORAGE_KEYS = {
+  VERSION: 'studioos_version',
   STUDIO: 'studioos_studio',
   USERS: 'studioos_users',
   PROJECTS: 'studioos_projects',
@@ -39,6 +40,8 @@ export const STORAGE_KEYS = {
   ISSUES: 'studioos_issues',
   CURRENT_USER_ID: 'studioos_current_user_id',
 } as const;
+
+const CURRENT_DATA_VERSION = 'v1.1_bestinterio_megha';
 
 export function getItem<T>(key: string, fallback: T): T {
   try {
@@ -65,8 +68,10 @@ export function setItem<T>(key: string, value: T): void {
  * Initializes localStorage with baseline mock data if not already initialized
  */
 export function initializeStorage(forceReset = false): void {
+  const version = localStorage.getItem(STORAGE_KEYS.VERSION);
   const isInitialized = localStorage.getItem(STORAGE_KEYS.STUDIO);
-  if (!isInitialized || forceReset) {
+  if (!isInitialized || version !== CURRENT_DATA_VERSION || forceReset) {
+    localStorage.setItem(STORAGE_KEYS.VERSION, CURRENT_DATA_VERSION);
     localStorage.setItem(STORAGE_KEYS.STUDIO, JSON.stringify(INITIAL_STUDIO));
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(INITIAL_USERS));
     localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(INITIAL_PROJECTS));
@@ -79,9 +84,7 @@ export function initializeStorage(forceReset = false): void {
     localStorage.setItem(STORAGE_KEYS.PROGRESS_UPDATES, JSON.stringify(INITIAL_PROGRESS_UPDATES));
     localStorage.setItem(STORAGE_KEYS.ISSUES, JSON.stringify(INITIAL_ISSUES));
 
-    if (!localStorage.getItem(STORAGE_KEYS.CURRENT_USER_ID) || forceReset) {
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER_ID, 'user-owner');
-    }
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER_ID, 'user-owner');
 
     window.dispatchEvent(new CustomEvent('studioos_storage_reset'));
   }

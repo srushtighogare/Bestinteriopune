@@ -24,8 +24,8 @@ export const LoginPage: React.FC = () => {
 
       <div className="max-w-md w-full mx-auto p-8 rounded-card bg-paper border border-line shadow-soft space-y-6">
         <div className="text-center space-y-2">
-          <img src="/logo.svg" alt="Studio Svara" className="w-12 h-12 mx-auto rounded-2xl" />
-          <h1 className="font-serif text-2xl font-medium text-ink">Sign in to Studio Svara</h1>
+          <img src="/logo.svg" alt="Bestinterio" className="w-12 h-12 mx-auto rounded-2xl" />
+          <h1 className="font-serif text-2xl font-medium text-ink">Sign in to Bestinterio</h1>
           <p className="text-xs text-muted">Interior Studio Operations System</p>
         </div>
 
@@ -36,7 +36,7 @@ export const LoginPage: React.FC = () => {
             </label>
             <input
               type="text"
-              defaultValue="srushti@studiosvara.com"
+              defaultValue="megha@bestinterio.com"
               className="w-full px-3.5 py-2.5 rounded-xl border border-line bg-ivory/50 text-sm text-ink focus:outline-none focus:border-olive"
             />
           </div>

@@ -29,7 +29,7 @@ export const ProjectSummaryPage: React.FC = () => {
         <div className="border-b border-line pb-4 flex justify-between items-start">
           <div>
             <h1 className="font-serif text-2xl font-medium text-ink">Weekly Site Summary</h1>
-            <p className="text-xs text-muted mt-1">Studio Svara · Project: {id}</p>
+            <p className="text-xs text-muted mt-1">Bestinterio · Project: {id}</p>
           </div>
           <img src="/logo.svg" alt="Logo" className="w-10 h-10" />
         </div>

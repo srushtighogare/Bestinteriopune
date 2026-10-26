@@ -95,7 +95,7 @@ export const billsService = {
     const vendors = getItem<Vendor[]>(STORAGE_KEYS.VENDORS, []);
     const newVendor: Vendor = {
       id: `ven-${Date.now().toString(36)}`,
-      studioId: 'studio-svara-001',
+      studioId: 'studio-bestinterio-001',
       name,
       category,
       phone,

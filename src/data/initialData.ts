@@ -13,9 +13,9 @@ import {
 } from '../types';
 
 export const INITIAL_STUDIO: Studio = {
-  id: 'studio-svara-001',
-  name: 'Studio Svara',
-  ownerName: 'Srushti Ghogare',
+  id: 'studio-bestinterio-001',
+  name: 'Bestinterio',
+  ownerName: 'Megha Jadhav',
   city: 'Pune',
   address: '402, Signature One, Senapati Bapat Road, Pune 411016',
   phone: '+91 98220 54321',
@@ -26,8 +26,8 @@ export const INITIAL_STUDIO: Studio = {
 export const INITIAL_USERS: User[] = [
   {
     id: 'user-owner',
-    studioId: 'studio-svara-001',
-    name: 'Srushti Ghogare',
+    studioId: 'studio-bestinterio-001',
+    name: 'Megha Jadhav',
     phone: '9822054321',
     role: 'owner',
     assignedProjectIds: ['proj-mehta', 'proj-baner', 'proj-kharadi', 'proj-sinha'],
@@ -37,7 +37,7 @@ export const INITIAL_USERS: User[] = [
   },
   {
     id: 'user-manager',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     name: 'Neha Kulkarni',
     phone: '9822187654',
     role: 'manager',
@@ -48,7 +48,7 @@ export const INITIAL_USERS: User[] = [
   },
   {
     id: 'user-supervisor',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     name: 'Rajiv Deshmukh',
     phone: '9850011223',
     role: 'supervisor',
@@ -60,7 +60,7 @@ export const INITIAL_USERS: User[] = [
   },
   {
     id: 'user-carpenter',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     name: 'Gurmukh Singh',
     phone: '9850022334',
     role: 'worker',
@@ -73,7 +73,7 @@ export const INITIAL_USERS: User[] = [
   },
   {
     id: 'user-electrician',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     name: 'Imran Shaikh',
     phone: '9850033445',
     role: 'worker',
@@ -86,7 +86,7 @@ export const INITIAL_USERS: User[] = [
   },
   {
     id: 'user-civil',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     name: 'Santosh Pawar',
     phone: '9850044556',
     role: 'worker',
@@ -99,7 +99,7 @@ export const INITIAL_USERS: User[] = [
   },
   {
     id: 'user-painter',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     name: 'Vijay More',
     phone: '9850055667',
     role: 'worker',
@@ -121,69 +121,69 @@ export const INITIAL_CATEGORIES: Category[] = [
 
 export const INITIAL_MATERIALS: Material[] = [
   // Carpentry
-  { id: 'mat-ply-18', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Plywood 18mm BWP', unit: 'sheet', lowStockThreshold: 10 },
-  { id: 'mat-ply-12', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Plywood 12mm', unit: 'sheet', lowStockThreshold: 8 },
-  { id: 'mat-mdf-18', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'MDF 18mm', unit: 'sheet', lowStockThreshold: 5 },
-  { id: 'mat-lam-oak', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Laminate 1mm', shadeCode: 'Oak 5512', unit: 'sheet', lowStockThreshold: 6 },
-  { id: 'mat-lam-white', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Laminate 1mm', shadeCode: 'White Matte 1101', unit: 'sheet', lowStockThreshold: 6 },
-  { id: 'mat-lam-walnut', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Laminate 0.8mm', shadeCode: 'Walnut 7720', unit: 'sheet', lowStockThreshold: 4 },
-  { id: 'mat-edgeband', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Edge band tape', unit: 'roll', lowStockThreshold: 5 },
-  { id: 'mat-hinges', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Soft-close hinges', unit: 'piece', lowStockThreshold: 10 },
-  { id: 'mat-channels', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Drawer channels 18"', unit: 'pair', lowStockThreshold: 6 },
-  { id: 'mat-handles', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Handles – profile', unit: 'piece', lowStockThreshold: 15 },
-  { id: 'mat-fevicol', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Fevicol SH 5kg', unit: 'tin', lowStockThreshold: 3 },
-  { id: 'mat-screws-1-5', studioId: 'studio-svara-001', categoryId: 'cat-carpentry', name: 'Screws 1.5"', unit: 'box', lowStockThreshold: 4 },
+  { id: 'mat-ply-18', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Plywood 18mm BWP', unit: 'sheet', lowStockThreshold: 10 },
+  { id: 'mat-ply-12', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Plywood 12mm', unit: 'sheet', lowStockThreshold: 8 },
+  { id: 'mat-mdf-18', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'MDF 18mm', unit: 'sheet', lowStockThreshold: 5 },
+  { id: 'mat-lam-oak', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Laminate 1mm', shadeCode: 'Oak 5512', unit: 'sheet', lowStockThreshold: 6 },
+  { id: 'mat-lam-white', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Laminate 1mm', shadeCode: 'White Matte 1101', unit: 'sheet', lowStockThreshold: 6 },
+  { id: 'mat-lam-walnut', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Laminate 0.8mm', shadeCode: 'Walnut 7720', unit: 'sheet', lowStockThreshold: 4 },
+  { id: 'mat-edgeband', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Edge band tape', unit: 'roll', lowStockThreshold: 5 },
+  { id: 'mat-hinges', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Soft-close hinges', unit: 'piece', lowStockThreshold: 10 },
+  { id: 'mat-channels', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Drawer channels 18"', unit: 'pair', lowStockThreshold: 6 },
+  { id: 'mat-handles', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Handles – profile', unit: 'piece', lowStockThreshold: 15 },
+  { id: 'mat-fevicol', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Fevicol SH 5kg', unit: 'tin', lowStockThreshold: 3 },
+  { id: 'mat-screws-1-5', studioId: 'studio-bestinterio-001', categoryId: 'cat-carpentry', name: 'Screws 1.5"', unit: 'box', lowStockThreshold: 4 },
 
   // Electrical
-  { id: 'mat-wire-1-5', studioId: 'studio-svara-001', categoryId: 'cat-electrical', name: 'Wire 1.5 sq mm', unit: 'coil', lowStockThreshold: 4 },
-  { id: 'mat-wire-2-5', studioId: 'studio-svara-001', categoryId: 'cat-electrical', name: 'Wire 2.5 sq mm', unit: 'coil', lowStockThreshold: 3 },
-  { id: 'mat-switch-6a', studioId: 'studio-svara-001', categoryId: 'cat-electrical', name: 'Modular switch 6A', unit: 'piece', lowStockThreshold: 20 },
-  { id: 'mat-socket-16a', studioId: 'studio-svara-001', categoryId: 'cat-electrical', name: 'Socket 16A', unit: 'piece', lowStockThreshold: 10 },
-  { id: 'mat-switch-plate-4', studioId: 'studio-svara-001', categoryId: 'cat-electrical', name: 'Switch plate 4-module', unit: 'piece', lowStockThreshold: 8 },
-  { id: 'mat-led-panel-12w', studioId: 'studio-svara-001', categoryId: 'cat-electrical', name: 'LED panel light 12W', unit: 'piece', lowStockThreshold: 12 },
-  { id: 'mat-led-bulb-9w', studioId: 'studio-svara-001', categoryId: 'cat-electrical', name: 'LED bulb 9W', unit: 'piece', lowStockThreshold: 10 },
-  { id: 'mat-ceiling-fan', studioId: 'studio-svara-001', categoryId: 'cat-electrical', name: 'Ceiling fan', unit: 'piece', lowStockThreshold: 2 },
-  { id: 'mat-profile-light', studioId: 'studio-svara-001', categoryId: 'cat-electrical', name: 'Profile light 1m', unit: 'piece', lowStockThreshold: 8 },
-  { id: 'mat-pvc-conduit-25', studioId: 'studio-svara-001', categoryId: 'cat-electrical', name: 'PVC conduit 25mm', unit: 'length', lowStockThreshold: 15 },
+  { id: 'mat-wire-1-5', studioId: 'studio-bestinterio-001', categoryId: 'cat-electrical', name: 'Wire 1.5 sq mm', unit: 'coil', lowStockThreshold: 4 },
+  { id: 'mat-wire-2-5', studioId: 'studio-bestinterio-001', categoryId: 'cat-electrical', name: 'Wire 2.5 sq mm', unit: 'coil', lowStockThreshold: 3 },
+  { id: 'mat-switch-6a', studioId: 'studio-bestinterio-001', categoryId: 'cat-electrical', name: 'Modular switch 6A', unit: 'piece', lowStockThreshold: 20 },
+  { id: 'mat-socket-16a', studioId: 'studio-bestinterio-001', categoryId: 'cat-electrical', name: 'Socket 16A', unit: 'piece', lowStockThreshold: 10 },
+  { id: 'mat-switch-plate-4', studioId: 'studio-bestinterio-001', categoryId: 'cat-electrical', name: 'Switch plate 4-module', unit: 'piece', lowStockThreshold: 8 },
+  { id: 'mat-led-panel-12w', studioId: 'studio-bestinterio-001', categoryId: 'cat-electrical', name: 'LED panel light 12W', unit: 'piece', lowStockThreshold: 12 },
+  { id: 'mat-led-bulb-9w', studioId: 'studio-bestinterio-001', categoryId: 'cat-electrical', name: 'LED bulb 9W', unit: 'piece', lowStockThreshold: 10 },
+  { id: 'mat-ceiling-fan', studioId: 'studio-bestinterio-001', categoryId: 'cat-electrical', name: 'Ceiling fan', unit: 'piece', lowStockThreshold: 2 },
+  { id: 'mat-profile-light', studioId: 'studio-bestinterio-001', categoryId: 'cat-electrical', name: 'Profile light 1m', unit: 'piece', lowStockThreshold: 8 },
+  { id: 'mat-pvc-conduit-25', studioId: 'studio-bestinterio-001', categoryId: 'cat-electrical', name: 'PVC conduit 25mm', unit: 'length', lowStockThreshold: 15 },
 
   // Civil
-  { id: 'mat-cement-50kg', studioId: 'studio-svara-001', categoryId: 'cat-civil', name: 'Cement 50kg', unit: 'bag', lowStockThreshold: 10 },
-  { id: 'mat-sand', studioId: 'studio-svara-001', categoryId: 'cat-civil', name: 'Sand', unit: 'brass', lowStockThreshold: 2 },
-  { id: 'mat-tile-adhesive', studioId: 'studio-svara-001', categoryId: 'cat-civil', name: 'Tile adhesive', unit: 'bag', lowStockThreshold: 5 },
-  { id: 'mat-floor-tiles', studioId: 'studio-svara-001', categoryId: 'cat-civil', name: 'Floor tiles 600×600', unit: 'box', lowStockThreshold: 12 },
-  { id: 'mat-wall-tiles', studioId: 'studio-svara-001', categoryId: 'cat-civil', name: 'Wall tiles 300×600', unit: 'box', lowStockThreshold: 12 },
-  { id: 'mat-grout', studioId: 'studio-svara-001', categoryId: 'cat-civil', name: 'Grout', unit: 'kg', lowStockThreshold: 8 },
+  { id: 'mat-cement-50kg', studioId: 'studio-bestinterio-001', categoryId: 'cat-civil', name: 'Cement 50kg', unit: 'bag', lowStockThreshold: 10 },
+  { id: 'mat-sand', studioId: 'studio-bestinterio-001', categoryId: 'cat-civil', name: 'Sand', unit: 'brass', lowStockThreshold: 2 },
+  { id: 'mat-tile-adhesive', studioId: 'studio-bestinterio-001', categoryId: 'cat-civil', name: 'Tile adhesive', unit: 'bag', lowStockThreshold: 5 },
+  { id: 'mat-floor-tiles', studioId: 'studio-bestinterio-001', categoryId: 'cat-civil', name: 'Floor tiles 600×600', unit: 'box', lowStockThreshold: 12 },
+  { id: 'mat-wall-tiles', studioId: 'studio-bestinterio-001', categoryId: 'cat-civil', name: 'Wall tiles 300×600', unit: 'box', lowStockThreshold: 12 },
+  { id: 'mat-grout', studioId: 'studio-bestinterio-001', categoryId: 'cat-civil', name: 'Grout', unit: 'kg', lowStockThreshold: 8 },
 
   // Painting
-  { id: 'mat-wall-putty', studioId: 'studio-svara-001', categoryId: 'cat-painting', name: 'Wall putty 20kg', unit: 'bag', lowStockThreshold: 6 },
-  { id: 'mat-primer', studioId: 'studio-svara-001', categoryId: 'cat-painting', name: 'Primer', unit: 'litre', lowStockThreshold: 10 },
-  { id: 'mat-emulsion-white', studioId: 'studio-svara-001', categoryId: 'cat-painting', name: 'Emulsion – white', unit: 'litre', lowStockThreshold: 20 },
-  { id: 'mat-emulsion-accent', studioId: 'studio-svara-001', categoryId: 'cat-painting', name: 'Emulsion – accent', unit: 'litre', lowStockThreshold: 10 },
+  { id: 'mat-wall-putty', studioId: 'studio-bestinterio-001', categoryId: 'cat-painting', name: 'Wall putty 20kg', unit: 'bag', lowStockThreshold: 6 },
+  { id: 'mat-primer', studioId: 'studio-bestinterio-001', categoryId: 'cat-painting', name: 'Primer', unit: 'litre', lowStockThreshold: 10 },
+  { id: 'mat-emulsion-white', studioId: 'studio-bestinterio-001', categoryId: 'cat-painting', name: 'Emulsion – white', unit: 'litre', lowStockThreshold: 20 },
+  { id: 'mat-emulsion-accent', studioId: 'studio-bestinterio-001', categoryId: 'cat-painting', name: 'Emulsion – accent', unit: 'litre', lowStockThreshold: 10 },
 
   // Plumbing
-  { id: 'mat-cpvc-pipe', studioId: 'studio-svara-001', categoryId: 'cat-plumbing', name: 'CPVC pipe ¾"', unit: 'length', lowStockThreshold: 8 },
-  { id: 'mat-basin-mixer', studioId: 'studio-svara-001', categoryId: 'cat-plumbing', name: 'Basin mixer', unit: 'piece', lowStockThreshold: 2 },
-  { id: 'mat-health-faucet', studioId: 'studio-svara-001', categoryId: 'cat-plumbing', name: 'Health faucet', unit: 'piece', lowStockThreshold: 3 },
+  { id: 'mat-cpvc-pipe', studioId: 'studio-bestinterio-001', categoryId: 'cat-plumbing', name: 'CPVC pipe ¾"', unit: 'length', lowStockThreshold: 8 },
+  { id: 'mat-basin-mixer', studioId: 'studio-bestinterio-001', categoryId: 'cat-plumbing', name: 'Basin mixer', unit: 'piece', lowStockThreshold: 2 },
+  { id: 'mat-health-faucet', studioId: 'studio-bestinterio-001', categoryId: 'cat-plumbing', name: 'Health faucet', unit: 'piece', lowStockThreshold: 3 },
 
   // False ceiling
-  { id: 'mat-gypsum-board', studioId: 'studio-svara-001', categoryId: 'cat-false-ceiling', name: 'Gypsum board', unit: 'sheet', lowStockThreshold: 15 },
-  { id: 'mat-gi-channels', studioId: 'studio-svara-001', categoryId: 'cat-false-ceiling', name: 'GI channels', unit: 'piece', lowStockThreshold: 20 },
-  { id: 'mat-ceiling-screws', studioId: 'studio-svara-001', categoryId: 'cat-false-ceiling', name: 'Ceiling screws', unit: 'box', lowStockThreshold: 5 },
+  { id: 'mat-gypsum-board', studioId: 'studio-bestinterio-001', categoryId: 'cat-false-ceiling', name: 'Gypsum board', unit: 'sheet', lowStockThreshold: 15 },
+  { id: 'mat-gi-channels', studioId: 'studio-bestinterio-001', categoryId: 'cat-false-ceiling', name: 'GI channels', unit: 'piece', lowStockThreshold: 20 },
+  { id: 'mat-ceiling-screws', studioId: 'studio-bestinterio-001', categoryId: 'cat-false-ceiling', name: 'Ceiling screws', unit: 'box', lowStockThreshold: 5 },
 ];
 
 export const INITIAL_VENDORS: Vendor[] = [
-  { id: 'ven-shree-ply', studioId: 'studio-svara-001', name: 'Shree Plywood & Laminates', category: 'Carpentry', phone: '98220 11990' },
-  { id: 'ven-om-elec', studioId: 'studio-svara-001', name: 'Om Electricals', category: 'Electrical', phone: '98220 22880' },
-  { id: 'ven-sai-hard', studioId: 'studio-svara-001', name: 'Sai Hardware', category: 'Hardware', phone: '98220 33770' },
-  { id: 'ven-mahalaxmi-cem', studioId: 'studio-svara-001', name: 'Mahalaxmi Cement Depot', category: 'Civil', phone: '98220 44660' },
-  { id: 'ven-city-colours', studioId: 'studio-svara-001', name: 'Asian Paints dealer (City Colours)', category: 'Painting', phone: '98220 55550' },
-  { id: 'ven-aqua-bath', studioId: 'studio-svara-001', name: 'Jaquar dealer (Aqua Bath Studio)', category: 'Plumbing', phone: '98220 66440' },
+  { id: 'ven-shree-ply', studioId: 'studio-bestinterio-001', name: 'Shree Plywood & Laminates', category: 'Carpentry', phone: '98220 11990' },
+  { id: 'ven-om-elec', studioId: 'studio-bestinterio-001', name: 'Om Electricals', category: 'Electrical', phone: '98220 22880' },
+  { id: 'ven-sai-hard', studioId: 'studio-bestinterio-001', name: 'Sai Hardware', category: 'Hardware', phone: '98220 33770' },
+  { id: 'ven-mahalaxmi-cem', studioId: 'studio-bestinterio-001', name: 'Mahalaxmi Cement Depot', category: 'Civil', phone: '98220 44660' },
+  { id: 'ven-city-colours', studioId: 'studio-bestinterio-001', name: 'Asian Paints dealer (City Colours)', category: 'Painting', phone: '98220 55550' },
+  { id: 'ven-aqua-bath', studioId: 'studio-bestinterio-001', name: 'Jaquar dealer (Aqua Bath Studio)', category: 'Plumbing', phone: '98220 66440' },
 ];
 
 export const INITIAL_PROJECTS: Project[] = [
   {
     id: 'proj-mehta',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     name: 'Mehta Residence',
     customerName: 'Anil & Priya Mehta',
     address: 'Flat 902, Tower B, Panchshil Towers, Kharadi, Pune',
@@ -207,7 +207,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     id: 'proj-baner',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     name: 'Baner Villa',
     customerName: 'Sharma family',
     address: 'Plot 44, Beverly Hills, Baner-Pashan Link Road, Pune',
@@ -232,7 +232,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     id: 'proj-kharadi',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     name: 'Kharadi Office',
     customerName: 'Lumen Analytics',
     address: '6th Floor, World Trade Center, Tower 3, Kharadi, Pune',
@@ -256,7 +256,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     id: 'proj-sinha',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     name: 'Sinha Apartment',
     customerName: 'Vikram & Radhika Sinha',
     address: 'Flat 403, Rohan Tarang, Wakad, Pune',
@@ -445,46 +445,46 @@ export const INITIAL_SCOPE_CELLS: ScopeGridCell[] = [
 export const INITIAL_STOCK_MOVEMENTS: StockMovement[] = [
   // --- Mehta Residence ---
   // Laminate 1mm Oak 5512: received 12 from Bill 1, used 12
-  { id: 'mov-m-1', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-lam-oak', type: 'received', quantity: 12, billId: 'bill-001', workerName: 'Rajiv Deshmukh', date: '2026-09-12T10:00:00.000Z' },
-  { id: 'mov-m-2', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-lam-oak', type: 'used', quantity: 6, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-kitchen', roomName: 'Kitchen', date: '2026-10-18T14:00:00.000Z' },
-  { id: 'mov-m-3', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-lam-oak', type: 'used', quantity: 6, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-master', roomName: 'Master Bedroom', date: '2026-10-24T16:00:00.000Z' },
+  { id: 'mov-m-1', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-lam-oak', type: 'received', quantity: 12, billId: 'bill-001', workerName: 'Rajiv Deshmukh', date: '2026-09-12T10:00:00.000Z' },
+  { id: 'mov-m-2', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-lam-oak', type: 'used', quantity: 6, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-kitchen', roomName: 'Kitchen', date: '2026-10-18T14:00:00.000Z' },
+  { id: 'mov-m-3', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-lam-oak', type: 'used', quantity: 6, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-master', roomName: 'Master Bedroom', date: '2026-10-24T16:00:00.000Z' },
 
   // Soft-close hinges: received 40 from Bill 1, used 31 -> 9 left (threshold 10)
-  { id: 'mov-m-4', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-hinges', type: 'received', quantity: 40, billId: 'bill-001', workerName: 'Rajiv Deshmukh', date: '2026-09-12T10:00:00.000Z' },
-  { id: 'mov-m-5', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-hinges', type: 'used', quantity: 20, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-kitchen', roomName: 'Kitchen', date: '2026-10-20T11:00:00.000Z' },
-  { id: 'mov-m-6', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-hinges', type: 'used', quantity: 11, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-master', roomName: 'Master Bedroom', date: '2026-10-25T15:30:00.000Z' },
+  { id: 'mov-m-4', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-hinges', type: 'received', quantity: 40, billId: 'bill-001', workerName: 'Rajiv Deshmukh', date: '2026-09-12T10:00:00.000Z' },
+  { id: 'mov-m-5', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-hinges', type: 'used', quantity: 20, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-kitchen', roomName: 'Kitchen', date: '2026-10-20T11:00:00.000Z' },
+  { id: 'mov-m-6', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-hinges', type: 'used', quantity: 11, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-master', roomName: 'Master Bedroom', date: '2026-10-25T15:30:00.000Z' },
 
   // Plywood 18mm: received 30 from Bill 1 & Bill 3, used 18 -> 12 left
-  { id: 'mov-m-7', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-ply-18', type: 'received', quantity: 20, billId: 'bill-001', workerName: 'Rajiv Deshmukh', date: '2026-09-12T10:00:00.000Z' },
-  { id: 'mov-m-8', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-ply-18', type: 'received', quantity: 10, billId: 'bill-003', workerName: 'Rajiv Deshmukh', date: '2026-10-05T11:00:00.000Z' },
-  { id: 'mov-m-9', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-ply-18', type: 'used', quantity: 12, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-kitchen', roomName: 'Kitchen', date: '2026-10-12T16:00:00.000Z' },
-  { id: 'mov-m-10', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-ply-18', type: 'used', quantity: 6, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-master', roomName: 'Master Bedroom', date: '2026-10-22T10:00:00.000Z' },
+  { id: 'mov-m-7', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-ply-18', type: 'received', quantity: 20, billId: 'bill-001', workerName: 'Rajiv Deshmukh', date: '2026-09-12T10:00:00.000Z' },
+  { id: 'mov-m-8', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-ply-18', type: 'received', quantity: 10, billId: 'bill-003', workerName: 'Rajiv Deshmukh', date: '2026-10-05T11:00:00.000Z' },
+  { id: 'mov-m-9', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-ply-18', type: 'used', quantity: 12, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-kitchen', roomName: 'Kitchen', date: '2026-10-12T16:00:00.000Z' },
+  { id: 'mov-m-10', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-ply-18', type: 'used', quantity: 6, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-master', roomName: 'Master Bedroom', date: '2026-10-22T10:00:00.000Z' },
 
   // Wire 1.5 sq mm: received 8, used 4 -> 4 left
-  { id: 'mov-m-11', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-wire-1-5', type: 'received', quantity: 8, billId: 'bill-002', workerName: 'Rajiv Deshmukh', date: '2026-09-15T12:00:00.000Z' },
-  { id: 'mov-m-12', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-wire-1-5', type: 'used', quantity: 4, workerId: 'user-electrician', workerName: 'Imran Shaikh', roomId: 'room-m-living', roomName: 'Living & Dining', date: '2026-10-21T14:00:00.000Z' },
+  { id: 'mov-m-11', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-wire-1-5', type: 'received', quantity: 8, billId: 'bill-002', workerName: 'Rajiv Deshmukh', date: '2026-09-15T12:00:00.000Z' },
+  { id: 'mov-m-12', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-wire-1-5', type: 'used', quantity: 4, workerId: 'user-electrician', workerName: 'Imran Shaikh', roomId: 'room-m-living', roomName: 'Living & Dining', date: '2026-10-21T14:00:00.000Z' },
 
   // Fevicol SH 5kg: received 6, used 4 -> 2 left (threshold 3) -> Running low
-  { id: 'mov-m-13', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-fevicol', type: 'received', quantity: 6, billId: 'bill-001', workerName: 'Rajiv Deshmukh', date: '2026-09-12T10:00:00.000Z' },
-  { id: 'mov-m-14', studioId: 'studio-svara-001', projectId: 'proj-mehta', materialId: 'mat-fevicol', type: 'used', quantity: 4, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-kitchen', roomName: 'Kitchen', date: '2026-10-23T11:00:00.000Z' },
+  { id: 'mov-m-13', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-fevicol', type: 'received', quantity: 6, billId: 'bill-001', workerName: 'Rajiv Deshmukh', date: '2026-09-12T10:00:00.000Z' },
+  { id: 'mov-m-14', studioId: 'studio-bestinterio-001', projectId: 'proj-mehta', materialId: 'mat-fevicol', type: 'used', quantity: 4, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-m-kitchen', roomName: 'Kitchen', date: '2026-10-23T11:00:00.000Z' },
 
   // --- Baner Villa ---
   // Wire 2.5 sq mm: received 10, used 7 -> 3 left (threshold 3) -> Running low
-  { id: 'mov-b-1', studioId: 'studio-svara-001', projectId: 'proj-baner', materialId: 'mat-wire-2-5', type: 'received', quantity: 10, billId: 'bill-005', workerName: 'Rajiv Deshmukh', date: '2026-09-10T11:00:00.000Z' },
-  { id: 'mov-b-2', studioId: 'studio-svara-001', projectId: 'proj-baner', materialId: 'mat-wire-2-5', type: 'used', quantity: 7, workerId: 'user-supervisor', workerName: 'Rajiv Deshmukh', roomId: 'room-b-living', roomName: 'Foyer & Living', date: '2026-10-22T15:00:00.000Z' },
+  { id: 'mov-b-1', studioId: 'studio-bestinterio-001', projectId: 'proj-baner', materialId: 'mat-wire-2-5', type: 'received', quantity: 10, billId: 'bill-005', workerName: 'Rajiv Deshmukh', date: '2026-09-10T11:00:00.000Z' },
+  { id: 'mov-b-2', studioId: 'studio-bestinterio-001', projectId: 'proj-baner', materialId: 'mat-wire-2-5', type: 'used', quantity: 7, workerId: 'user-supervisor', workerName: 'Rajiv Deshmukh', roomId: 'room-b-living', roomName: 'Foyer & Living', date: '2026-10-22T15:00:00.000Z' },
 
   // Cement: received 60, used 52 -> 8 left (threshold 10) -> Running low
-  { id: 'mov-b-3', studioId: 'studio-svara-001', projectId: 'proj-baner', materialId: 'mat-cement-50kg', type: 'received', quantity: 60, billId: 'bill-004', workerName: 'Rajiv Deshmukh', date: '2026-08-20T10:00:00.000Z' },
-  { id: 'mov-b-4', studioId: 'studio-svara-001', projectId: 'proj-baner', materialId: 'mat-cement-50kg', type: 'used', quantity: 52, workerId: 'user-civil', workerName: 'Santosh Pawar', roomId: 'room-b-living', roomName: 'Foyer & Living', date: '2026-10-24T17:00:00.000Z' },
+  { id: 'mov-b-3', studioId: 'studio-bestinterio-001', projectId: 'proj-baner', materialId: 'mat-cement-50kg', type: 'received', quantity: 60, billId: 'bill-004', workerName: 'Rajiv Deshmukh', date: '2026-08-20T10:00:00.000Z' },
+  { id: 'mov-b-4', studioId: 'studio-bestinterio-001', projectId: 'proj-baner', materialId: 'mat-cement-50kg', type: 'used', quantity: 52, workerId: 'user-civil', workerName: 'Santosh Pawar', roomId: 'room-b-living', roomName: 'Foyer & Living', date: '2026-10-24T17:00:00.000Z' },
 
   // Hinges overuse at Baner Villa: received 10, but Gurmukh logged using 13! (3 overused alert)
-  { id: 'mov-b-5', studioId: 'studio-svara-001', projectId: 'proj-baner', materialId: 'mat-hinges', type: 'received', quantity: 10, billId: 'bill-007', workerName: 'Rajiv Deshmukh', date: '2026-10-10T12:00:00.000Z' },
-  { id: 'mov-b-6', studioId: 'studio-svara-001', projectId: 'proj-baner', materialId: 'mat-hinges', type: 'used', quantity: 13, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-b-living', roomName: 'Foyer & Living', date: '2026-10-26T09:30:00.000Z' },
+  { id: 'mov-b-5', studioId: 'studio-bestinterio-001', projectId: 'proj-baner', materialId: 'mat-hinges', type: 'received', quantity: 10, billId: 'bill-007', workerName: 'Rajiv Deshmukh', date: '2026-10-10T12:00:00.000Z' },
+  { id: 'mov-b-6', studioId: 'studio-bestinterio-001', projectId: 'proj-baner', materialId: 'mat-hinges', type: 'used', quantity: 13, workerId: 'user-carpenter', workerName: 'Gurmukh Singh', roomId: 'room-b-living', roomName: 'Foyer & Living', date: '2026-10-26T09:30:00.000Z' },
 
   // --- Kharadi Office ---
   // PVC Conduit 25mm: received 30, used 10 -> 20 left
-  { id: 'mov-k-1', studioId: 'studio-svara-001', projectId: 'proj-kharadi', materialId: 'mat-pvc-conduit-25', type: 'received', quantity: 30, billId: 'bill-008', workerName: 'Rajiv Deshmukh', date: '2026-10-12T14:00:00.000Z' },
-  { id: 'mov-k-2', studioId: 'studio-svara-001', projectId: 'proj-kharadi', materialId: 'mat-pvc-conduit-25', type: 'used', quantity: 10, workerId: 'user-electrician', workerName: 'Imran Shaikh', roomId: 'room-k-hall', roomName: 'Open Work Hall', date: '2026-10-22T10:00:00.000Z' },
+  { id: 'mov-k-1', studioId: 'studio-bestinterio-001', projectId: 'proj-kharadi', materialId: 'mat-pvc-conduit-25', type: 'received', quantity: 30, billId: 'bill-008', workerName: 'Rajiv Deshmukh', date: '2026-10-12T14:00:00.000Z' },
+  { id: 'mov-k-2', studioId: 'studio-bestinterio-001', projectId: 'proj-kharadi', materialId: 'mat-pvc-conduit-25', type: 'used', quantity: 10, workerId: 'user-electrician', workerName: 'Imran Shaikh', roomId: 'room-k-hall', roomName: 'Open Work Hall', date: '2026-10-22T10:00:00.000Z' },
 ];
 
 /**
@@ -494,7 +494,7 @@ export const INITIAL_STOCK_MOVEMENTS: StockMovement[] = [
 export const INITIAL_BILLS: Bill[] = [
   {
     id: 'bill-001',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-mehta',
     vendorId: 'ven-shree-ply',
     vendorName: 'Shree Plywood & Laminates',
@@ -514,7 +514,7 @@ export const INITIAL_BILLS: Bill[] = [
   },
   {
     id: 'bill-002',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-mehta',
     vendorId: 'ven-om-elec',
     vendorName: 'Om Electricals',
@@ -532,7 +532,7 @@ export const INITIAL_BILLS: Bill[] = [
   },
   {
     id: 'bill-003',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-mehta',
     vendorId: 'ven-shree-ply',
     vendorName: 'Shree Plywood & Laminates',
@@ -551,7 +551,7 @@ export const INITIAL_BILLS: Bill[] = [
   },
   {
     id: 'bill-004',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-baner',
     vendorId: 'ven-mahalaxmi-cem',
     vendorName: 'Mahalaxmi Cement Depot',
@@ -569,7 +569,7 @@ export const INITIAL_BILLS: Bill[] = [
   },
   {
     id: 'bill-005',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-baner',
     vendorId: 'ven-om-elec',
     vendorName: 'Om Electricals',
@@ -588,7 +588,7 @@ export const INITIAL_BILLS: Bill[] = [
   },
   {
     id: 'bill-006',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-baner',
     vendorId: 'ven-aqua-bath',
     vendorName: 'Jaquar dealer (Aqua Bath Studio)',
@@ -607,7 +607,7 @@ export const INITIAL_BILLS: Bill[] = [
   },
   {
     id: 'bill-007',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-baner',
     vendorId: 'ven-sai-hard',
     vendorName: 'Sai Hardware',
@@ -625,7 +625,7 @@ export const INITIAL_BILLS: Bill[] = [
   },
   {
     id: 'bill-008',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-kharadi',
     vendorId: 'ven-om-elec',
     vendorName: 'Om Electricals',
@@ -645,7 +645,7 @@ export const INITIAL_BILLS: Bill[] = [
   // --- Two bills uploaded "yesterday" (25 Oct 2026) waiting for review ---
   {
     id: 'bill-009',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-mehta',
     vendorId: 'ven-city-colours',
     vendorName: 'Asian Paints dealer (City Colours)',
@@ -663,7 +663,7 @@ export const INITIAL_BILLS: Bill[] = [
   },
   {
     id: 'bill-010',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-baner',
     vendorId: 'ven-sai-hard',
     vendorName: 'Sai Hardware',
@@ -688,7 +688,7 @@ export const INITIAL_BILLS: Bill[] = [
 export const INITIAL_PROGRESS_UPDATES: ProgressUpdate[] = [
   {
     id: 'upd-01',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-mehta',
     roomId: 'room-m-kitchen',
     roomName: 'Kitchen',
@@ -705,7 +705,7 @@ export const INITIAL_PROGRESS_UPDATES: ProgressUpdate[] = [
   },
   {
     id: 'upd-02',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-mehta',
     roomId: 'room-m-master',
     roomName: 'Master Bedroom',
@@ -722,7 +722,7 @@ export const INITIAL_PROGRESS_UPDATES: ProgressUpdate[] = [
   },
   {
     id: 'upd-03',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-mehta',
     roomId: 'room-m-living',
     roomName: 'Living & Dining',
@@ -739,7 +739,7 @@ export const INITIAL_PROGRESS_UPDATES: ProgressUpdate[] = [
   },
   {
     id: 'upd-04',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-mehta',
     roomId: 'room-m-kitchen',
     roomName: 'Kitchen',
@@ -756,7 +756,7 @@ export const INITIAL_PROGRESS_UPDATES: ProgressUpdate[] = [
   },
   {
     id: 'upd-05',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-baner',
     roomId: 'room-b-living',
     roomName: 'Foyer & Living',
@@ -773,7 +773,7 @@ export const INITIAL_PROGRESS_UPDATES: ProgressUpdate[] = [
   },
   {
     id: 'upd-06',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-baner',
     roomId: 'room-b-living',
     roomName: 'Foyer & Living',
@@ -790,7 +790,7 @@ export const INITIAL_PROGRESS_UPDATES: ProgressUpdate[] = [
   },
   {
     id: 'upd-07',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-baner',
     roomId: 'room-b-lounge',
     roomName: 'First Floor Lounge',
@@ -807,7 +807,7 @@ export const INITIAL_PROGRESS_UPDATES: ProgressUpdate[] = [
   },
   {
     id: 'upd-08',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-kharadi',
     roomId: 'room-k-reception',
     roomName: 'Reception & Waiting',
@@ -824,7 +824,7 @@ export const INITIAL_PROGRESS_UPDATES: ProgressUpdate[] = [
   },
   {
     id: 'upd-09',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-kharadi',
     roomId: 'room-k-hall',
     roomName: 'Open Work Hall',
@@ -844,7 +844,7 @@ export const INITIAL_PROGRESS_UPDATES: ProgressUpdate[] = [
 export const INITIAL_ISSUES: Issue[] = [
   {
     id: 'iss-01',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-mehta',
     roomId: 'room-m-kitchen',
     roomName: 'Kitchen',
@@ -856,7 +856,7 @@ export const INITIAL_ISSUES: Issue[] = [
   },
   {
     id: 'iss-02',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-mehta',
     roomId: 'room-m-master',
     roomName: 'Master Bedroom',
@@ -868,7 +868,7 @@ export const INITIAL_ISSUES: Issue[] = [
   },
   {
     id: 'iss-03',
-    studioId: 'studio-svara-001',
+    studioId: 'studio-bestinterio-001',
     projectId: 'proj-baner',
     roomId: 'room-b-lounge',
     roomName: 'First Floor Lounge',

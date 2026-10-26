@@ -8,10 +8,10 @@ export const InviteOnboardingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-ivory flex flex-col justify-between p-6 max-w-md mx-auto">
       <div className="text-center pt-8 space-y-4">
-        <img src="/logo.svg" alt="Studio Svara" className="w-14 h-14 mx-auto rounded-2xl" />
+        <img src="/logo.svg" alt="Bestinterio" className="w-14 h-14 mx-auto rounded-2xl" />
         <h1 className="font-serif text-2xl font-medium text-ink">Welcome to StudioOS</h1>
         <p className="text-sm text-muted">
-          Studio Svara has invited you to join the site operations team. (Invite code: {code})
+          Bestinterio has invited you to join the site operations team. (Invite code: {code})
         </p>
       </div>
 
@@ -28,7 +28,7 @@ export const InviteOnboardingPage: React.FC = () => {
       </div>
 
       <footer className="text-center text-xs text-muted pb-4">
-        Studio Svara · Site Operations
+        Bestinterio · Site Operations
       </footer>
     </div>
   );
