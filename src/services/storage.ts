@@ -41,7 +41,7 @@ export const STORAGE_KEYS = {
   CURRENT_USER_ID: 'studioos_current_user_id',
 } as const;
 
-const CURRENT_DATA_VERSION = 'v1.3_step2_auth';
+const CURRENT_DATA_VERSION = 'v1.4_step3_home';
 
 export function getItem<T>(key: string, fallback: T): T {
   try {

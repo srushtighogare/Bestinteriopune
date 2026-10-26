@@ -164,19 +164,18 @@ export function computeAttentionItems(
         const usedMovement = movements
           .filter(m => m.projectId === proj.id && m.materialId === mat.id && m.type === 'used')
           .pop();
-        const workerName = usedMovement?.workerName || 'A team member';
+        const workerFirstName = usedMovement?.workerName ? usedMovement.workerName.split(' ')[0] : 'A team member';
+        const matDisplayName = mat.name.toLowerCase().includes('hinges') ? 'hinges' : mat.name.toLowerCase();
         items.push({
           id: `overuse-${proj.id}-${mat.id}`,
           type: 'overused',
-          text: `${workerName} used ${balance.overuseQty} more ${mat.name.toLowerCase()} than were in stock at ${proj.name}`,
+          text: `${workerFirstName} used ${balance.overuseQty} more ${matDisplayName} than were in stock at ${proj.name}`,
           link: `/projects/${proj.id}?tab=inventory`,
           projectId: proj.id,
           severity: 'rust',
         });
-      }
-
-      // Out of stock alert
-      if (balance.status === 'out_of_stock' && balance.received > 0) {
+      } else if (balance.status === 'out_of_stock' && balance.received > 0) {
+        // Out of stock alert
         const shade = mat.shadeCode ? ` (${mat.shadeCode})` : '';
         items.push({
           id: `oos-${proj.id}-${mat.id}`,
@@ -219,3 +218,60 @@ export function computeAttentionItems(
 
   return items;
 }
+
+/**
+ * Computes count of items running low across active projects.
+ */
+export function computeItemsRunningLowCount(
+  projects: Project[],
+  materials: Material[],
+  movements: StockMovement[]
+): number {
+  const activeProjects = projects.filter(p => p.status === 'active');
+  const runningLowSet = new Set<string>();
+  activeProjects.forEach(proj => {
+    materials.forEach(mat => {
+      const balance = computeMaterialStockBalance(mat, movements, proj.id);
+      if (balance.status === 'running_low') {
+        runningLowSet.add(`${proj.id}-${mat.id}`);
+      }
+    });
+  });
+  return runningLowSet.size;
+}
+
+/**
+ * Formats a timestamp into relative plain-language time
+ * against the October 2026 baseline.
+ */
+export function formatRelativeTime(
+  dateInput: string | Date,
+  baseline: Date = TODAY_BASELINE
+): string {
+  const d = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+  const diffMs = baseline.getTime() - d.getTime();
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMinutes < 1) return 'Just now';
+  if (diffMinutes < 60) return `${diffMinutes}m ago`;
+  if (diffHours < 24 && d.getDate() === baseline.getDate()) return `${diffHours}h ago`;
+  if (diffDays === 1 || (diffHours < 36 && d.getDate() === baseline.getDate() - 1)) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays}d ago`;
+
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${d.getDate()} ${months[d.getMonth()]}`;
+}
+
+/**
+ * Formats numbers into Indian Rupee currency (e.g. ₹18,00,000).
+ */
+export function formatCurrencyINR(amount: number): string {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+

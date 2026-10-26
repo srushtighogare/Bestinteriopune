@@ -14,7 +14,8 @@ export const SiteLoginPage: React.FC = () => {
     setTrustedUser, 
     verifyAndLoginWithPin, 
     isLockedOut, 
-    resetLockout 
+    resetLockout,
+    isDemoMode 
   } = useAuth();
 
   const [mode, setMode] = useState<'unlock' | 'phone_entry'>('unlock');
@@ -132,19 +133,21 @@ export const SiteLoginPage: React.FC = () => {
             <p className="text-xs text-ink-2 leading-relaxed">
               Too many tries. Try again in 15 minutes or ask your supervisor to reset your PIN.
             </p>
-            <div className="pt-2">
-              <button
-                onClick={() => {
-                  resetLockout();
-                  setErrorMessage(null);
-                  setPin('');
-                }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line bg-paper text-xs text-ink font-medium hover:bg-sand/30 transition-colors"
-              >
-                <RotateCcw className="w-3.5 h-3.5 text-muted" strokeWidth={1.5} />
-                <span>Reset demo lockout (meeting demo)</span>
-              </button>
-            </div>
+            {isDemoMode && (
+              <div className="pt-2">
+                <button
+                  onClick={() => {
+                    resetLockout();
+                    setErrorMessage(null);
+                    setPin('');
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line bg-paper text-xs text-ink font-medium hover:bg-sand/30 transition-colors"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-muted" strokeWidth={1.5} />
+                  <span>Reset demo lockout (meeting demo)</span>
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <>
