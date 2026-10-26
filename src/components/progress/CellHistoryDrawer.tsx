@@ -54,16 +54,21 @@ export const CellHistoryDrawer: React.FC<CellHistoryDrawerProps> = ({
   const handleQuickStatusChange = async (newStatus: ProgressCellStatus, percentage: number) => {
     setIsUpdating(true);
     try {
+      const authorId = currentUser?.id || 'b1eebc99-9c0b-4ef8-bb6d-000000000001';
       const authorName = currentUser?.name || 'Megha Jadhav';
-      await progressService.updateCell(
-        cell.projectId,
-        cell.roomId,
-        cell.trade,
-        newStatus,
-        percentage,
+      await progressService.recordUpdate({
+        studioId: cell.studioId || 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
+        projectId: cell.projectId,
+        roomId: cell.roomId,
+        roomName,
+        trade: cell.trade,
+        authorId,
         authorName,
-        cell.studioId
-      );
+        status: newStatus,
+        percentage,
+        note: 'Updated from studio console',
+        photos: [],
+      });
       onCellUpdated();
     } catch (err) {
       console.error('Failed to update cell status:', err);
@@ -149,24 +154,36 @@ export const CellHistoryDrawer: React.FC<CellHistoryDrawerProps> = ({
               <span className="text-[11px] text-muted font-medium block mb-2">
                 Quick update status:
               </span>
-              <div className="grid grid-cols-4 gap-1.5">
+              <div className="grid grid-cols-5 gap-1">
                 <button
                   type="button"
                   disabled={isUpdating}
                   onClick={() => handleQuickStatusChange('not_started', 0)}
-                  className={`py-1 px-2 rounded-lg text-[11px] font-medium border text-center transition-all ${
+                  className={`py-1.5 px-1 rounded-lg text-[10px] font-medium border text-center transition-all ${
                     cell.status === 'not_started'
                       ? 'bg-ink text-paper border-ink'
                       : 'bg-paper text-muted border-line hover:border-sand-dark'
                   }`}
                 >
-                  0%
+                  Not started
+                </button>
+                <button
+                  type="button"
+                  disabled={isUpdating}
+                  onClick={() => handleQuickStatusChange('in_progress', 25)}
+                  className={`py-1.5 px-1 rounded-lg text-[10px] font-medium border text-center transition-all ${
+                    cell.status === 'in_progress' && cell.percentage === 25
+                      ? 'bg-amber text-paper border-amber'
+                      : 'bg-paper text-amber border-amber/30 hover:bg-amber-soft'
+                  }`}
+                >
+                  25%
                 </button>
                 <button
                   type="button"
                   disabled={isUpdating}
                   onClick={() => handleQuickStatusChange('in_progress', 50)}
-                  className={`py-1 px-2 rounded-lg text-[11px] font-medium border text-center transition-all ${
+                  className={`py-1.5 px-1 rounded-lg text-[10px] font-medium border text-center transition-all ${
                     cell.status === 'in_progress' && cell.percentage === 50
                       ? 'bg-amber text-paper border-amber'
                       : 'bg-paper text-amber border-amber/30 hover:bg-amber-soft'
@@ -178,7 +195,7 @@ export const CellHistoryDrawer: React.FC<CellHistoryDrawerProps> = ({
                   type="button"
                   disabled={isUpdating}
                   onClick={() => handleQuickStatusChange('in_progress', 75)}
-                  className={`py-1 px-2 rounded-lg text-[11px] font-medium border text-center transition-all ${
+                  className={`py-1.5 px-1 rounded-lg text-[10px] font-medium border text-center transition-all ${
                     cell.status === 'in_progress' && cell.percentage === 75
                       ? 'bg-amber text-paper border-amber'
                       : 'bg-paper text-amber border-amber/30 hover:bg-amber-soft'
@@ -190,13 +207,13 @@ export const CellHistoryDrawer: React.FC<CellHistoryDrawerProps> = ({
                   type="button"
                   disabled={isUpdating}
                   onClick={() => handleQuickStatusChange('done', 100)}
-                  className={`py-1 px-2 rounded-lg text-[11px] font-medium border text-center transition-all ${
+                  className={`py-1.5 px-1 rounded-lg text-[10px] font-medium border text-center transition-all ${
                     cell.status === 'done'
                       ? 'bg-olive text-paper border-olive'
                       : 'bg-paper text-olive border-olive/30 hover:bg-olive-soft'
                   }`}
                 >
-                  100%
+                  Done
                 </button>
               </div>
             </div>

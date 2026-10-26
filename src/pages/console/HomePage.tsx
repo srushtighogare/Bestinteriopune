@@ -214,10 +214,13 @@ export const HomePage: React.FC = () => {
 
       // Determine operational status
       let statusType: 'on_track' | 'needs_attention' | 'delayed' = 'on_track';
+      const isPastTarget = new Date(proj.targetDate).getTime() < new Date().setHours(0,0,0,0);
       const hasStale = days !== null && days >= 3;
       const hasAttention = attentionItems.some(item => item.projectId === proj.id);
 
-      if (hasStale || hasAttention) {
+      if (isPastTarget) {
+        statusType = 'delayed';
+      } else if (hasStale || hasAttention) {
         statusType = 'needs_attention';
       }
 
@@ -525,7 +528,12 @@ export const HomePage: React.FC = () => {
 
                       {/* Status Chip */}
                       <div className="absolute top-3 right-3">
-                        {isNeedsAttention ? (
+                        {stats.statusType === 'delayed' ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-rust-soft text-rust border border-rust/40 shadow-xs">
+                            <span className="w-1.5 h-1.5 rounded-full bg-rust" />
+                            <span>Delayed</span>
+                          </span>
+                        ) : isNeedsAttention ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-soft text-amber border border-amber/40 shadow-xs">
                             <span className="w-1.5 h-1.5 rounded-full bg-amber" />
                             <span>Needs attention</span>

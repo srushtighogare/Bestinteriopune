@@ -348,6 +348,7 @@ export const ProjectDetailPage: React.FC = () => {
     );
   }
 
+  const isDelayed = project ? project.status !== 'completed' && project.status !== 'on_hold' && new Date(project.targetDate).getTime() < new Date().setHours(0,0,0,0) : false;
   const isNeedsAttention = daysSinceUpdate !== null && daysSinceUpdate >= 3;
 
   return (
@@ -396,6 +397,11 @@ export const ProjectDetailPage: React.FC = () => {
               ) : project.status === 'completed' ? (
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-olive-soft text-olive border border-olive/30 shadow-xs">
                   <span>Completed</span>
+                </span>
+              ) : isDelayed ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-rust-soft text-rust border border-rust/40 shadow-xs">
+                  <span className="w-2 h-2 rounded-full bg-rust" />
+                  <span>Delayed</span>
                 </span>
               ) : isNeedsAttention ? (
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-amber-soft text-amber border border-amber/40 shadow-xs">
