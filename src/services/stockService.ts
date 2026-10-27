@@ -35,8 +35,10 @@ export interface RecordAdjustmentInput {
 }
 
 export const stockService = {
-  async listMaterials(): Promise<Material[]> {
-    return getItem<Material[]>(STORAGE_KEYS.MATERIALS, []);
+  async listMaterials(includeArchived = false): Promise<Material[]> {
+    const materials = getItem<Material[]>(STORAGE_KEYS.MATERIALS, []);
+    if (includeArchived) return materials;
+    return materials.filter(m => !m.isArchived);
   },
 
   async listCategories(): Promise<Category[]> {
@@ -227,7 +229,21 @@ export const stockService = {
     return updated;
   },
 
+  async archiveMaterial(id: string): Promise<Material> {
+    return this.updateMaterial(id, { isArchived: true });
+  },
+
+  async unarchiveMaterial(id: string): Promise<Material> {
+    return this.updateMaterial(id, { isArchived: false });
+  },
+
   async deleteMaterial(id: string): Promise<boolean> {
+    const movements = getItem<StockMovement[]>(STORAGE_KEYS.STOCK_MOVEMENTS, []);
+    const hasMovements = movements.some(m => m.materialId === id);
+    if (hasMovements) {
+      throw new Error('Cannot delete a material that has stock movements. Please archive it instead.');
+    }
+
     const materials = getItem<Material[]>(STORAGE_KEYS.MATERIALS, []);
     const filtered = materials.filter(m => m.id !== id);
     setItem(STORAGE_KEYS.MATERIALS, filtered);

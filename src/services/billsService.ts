@@ -1,5 +1,5 @@
 import { getItem, setItem, STORAGE_KEYS } from './storage';
-import { Bill, BillItem, Vendor } from '../types';
+import { Bill, BillItem, StockMovement, Vendor } from '../types';
 import { stockService } from './stockService';
 
 export interface CreateBillInput {
@@ -86,6 +86,59 @@ export const billsService = {
     bills[index].status = 'reviewed';
     setItem(STORAGE_KEYS.BILLS, bills);
     return bills[index];
+  },
+
+  async updateBill(id: string, updates: Partial<Bill>): Promise<Bill> {
+    const bills = getItem<Bill[]>(STORAGE_KEYS.BILLS, []);
+    const index = bills.findIndex(b => b.id === id);
+    if (index === -1) throw new Error('Bill not found');
+
+    const existing = bills[index];
+    const updated = { ...existing, ...updates };
+
+    // If items were updated, reconcile stock movements for this bill
+    if (updates.items) {
+      const allMovements = getItem<StockMovement[]>(STORAGE_KEYS.STOCK_MOVEMENTS, []);
+      // Remove previous movements from this bill
+      const remainingMovements = allMovements.filter(m => m.billId !== id);
+      
+      // Re-create movements for items with addToStock = true
+      const newMovements: StockMovement[] = [];
+      for (const item of updates.items) {
+        if (item.addToStock) {
+          newMovements.push({
+            id: crypto.randomUUID(),
+            studioId: updated.studioId,
+            projectId: updated.projectId,
+            materialId: item.materialId,
+            type: 'received',
+            quantity: item.quantity,
+            billId: updated.id,
+            workerName: updated.uploadedBy || 'Supervisor',
+            date: new Date().toISOString(),
+            note: `Received from Bill ${updated.billNumber || updated.id}`,
+          });
+        }
+      }
+
+      setItem(STORAGE_KEYS.STOCK_MOVEMENTS, [...newMovements, ...remainingMovements]);
+    }
+
+    bills[index] = updated;
+    setItem(STORAGE_KEYS.BILLS, bills);
+    return updated;
+  },
+
+  async deleteBill(id: string): Promise<boolean> {
+    const bills = getItem<Bill[]>(STORAGE_KEYS.BILLS, []);
+    const filtered = bills.filter(b => b.id !== id);
+    setItem(STORAGE_KEYS.BILLS, filtered);
+
+    // Also remove stock movements associated with this bill
+    const allMovements = getItem<StockMovement[]>(STORAGE_KEYS.STOCK_MOVEMENTS, []);
+    const remainingMovements = allMovements.filter(m => m.billId !== id);
+    setItem(STORAGE_KEYS.STOCK_MOVEMENTS, remainingMovements);
+    return true;
   },
 
   async listVendors(): Promise<Vendor[]> {

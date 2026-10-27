@@ -95,6 +95,7 @@ export interface Material {
   unit: string;
   lowStockThreshold: number;
   rate?: number; // Estimated / default unit rate (₹)
+  isArchived?: boolean; // When true, hidden from pickers but preserved in history
 }
 
 export type StockMovementType = 'received' | 'used' | 'adjustment';

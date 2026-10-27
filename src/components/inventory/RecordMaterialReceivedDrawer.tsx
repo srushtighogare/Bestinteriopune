@@ -129,7 +129,7 @@ export const RecordMaterialReceivedDrawer: React.FC<RecordMaterialReceivedDrawer
             categoryId: firstCat.id,
             materialId: firstMat ? firstMat.id : '',
             quantity: 5,
-            rate: firstMat ? (rates[firstMat.id] || firstMat.rate || 0) : 0,
+            rate: canSeeAmounts && firstMat ? (rates[firstMat.id] || firstMat.rate || 0) : 0,
           }]);
         }
       } catch (err) {
@@ -153,7 +153,7 @@ export const RecordMaterialReceivedDrawer: React.FC<RecordMaterialReceivedDrawer
   const handleCategoryChange = (index: number, catId: string) => {
     const matForCat = materials.filter(m => m.categoryId === catId);
     const defaultMat = matForCat[0];
-    const defaultRate = defaultMat ? (rateMap[defaultMat.id] || defaultMat.rate || 0) : 0;
+    const defaultRate = canSeeAmounts && defaultMat ? (rateMap[defaultMat.id] || defaultMat.rate || 0) : 0;
 
     setItems(prev => {
       const copy = [...prev];
@@ -169,7 +169,7 @@ export const RecordMaterialReceivedDrawer: React.FC<RecordMaterialReceivedDrawer
 
   const handleMaterialChange = (index: number, matId: string) => {
     const selectedMat = materials.find(m => m.id === matId);
-    const defaultRate = selectedMat ? (rateMap[selectedMat.id] || selectedMat.rate || 0) : 0;
+    const defaultRate = canSeeAmounts && selectedMat ? (rateMap[selectedMat.id] || selectedMat.rate || 0) : 0;
 
     setItems(prev => {
       const copy = [...prev];
@@ -210,7 +210,7 @@ export const RecordMaterialReceivedDrawer: React.FC<RecordMaterialReceivedDrawer
   const handleAddItem = () => {
     const defaultCat = categories[0];
     const defaultMat = defaultCat ? materials.find(m => m.categoryId === defaultCat.id) : undefined;
-    const defaultRate = defaultMat ? (rateMap[defaultMat.id] || defaultMat.rate || 0) : 0;
+    const defaultRate = canSeeAmounts && defaultMat ? (rateMap[defaultMat.id] || defaultMat.rate || 0) : 0;
 
     setItems(prev => [
       ...prev,

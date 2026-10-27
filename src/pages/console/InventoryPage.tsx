@@ -102,7 +102,7 @@ export const InventoryPage: React.FC = () => {
     setIsLoading(true);
     try {
       const [matList, catList, movList, projList, rates, studioData] = await Promise.all([
-        stockService.listMaterials(),
+        stockService.listMaterials(true), // Load all materials including archived for catalogue management
         stockService.listCategories(),
         stockService.getMovements(),
         projectsService.list(),
@@ -308,17 +308,34 @@ export const InventoryPage: React.FC = () => {
 
   const handleDeleteMaterial = async (mat: Material) => {
     const hasMovements = movements.some(m => m.materialId === mat.id);
-    const confirmMsg = hasMovements
-      ? `Material "${mat.name}" has stock movements logged in projects. Deleting it will remove it from future selections. Proceed?`
-      : `Delete "${mat.name}" from catalogue?`;
+    if (hasMovements) {
+      if (confirm(`"${mat.name}" has stock movements logged on site and cannot be permanently deleted.\n\nWould you like to archive it instead?\nArchived materials are hidden from pickers but preserved in historical reports.`)) {
+        try {
+          await stockService.archiveMaterial(mat.id);
+          await loadData();
+        } catch (err) {
+          console.error('Failed to archive material:', err);
+        }
+      }
+      return;
+    }
 
-    if (confirm(confirmMsg)) {
+    if (confirm(`Delete "${mat.name}" from catalogue?`)) {
       try {
         await stockService.deleteMaterial(mat.id);
         await loadData();
       } catch (err) {
         console.error('Failed to delete material:', err);
       }
+    }
+  };
+
+  const handleUnarchiveMaterial = async (mat: Material) => {
+    try {
+      await stockService.unarchiveMaterial(mat.id);
+      await loadData();
+    } catch (err) {
+      console.error('Failed to unarchive material:', err);
     }
   };
 
@@ -757,18 +774,32 @@ export const InventoryPage: React.FC = () => {
                                     )}
                                   </div>
                                   <div className="space-y-1.5 text-xs">
-                                    {siteBreakdown.map(item => (
-                                      <div key={item.project.id} className="flex items-center justify-between">
-                                        <span className="text-ink truncate max-w-[120px]">
-                                          {item.project.name}
-                                        </span>
-                                        <span className={`tabular-nums font-medium ${
-                                          item.inStock <= 0 ? 'text-rust' : item.inStock <= mat.lowStockThreshold ? 'text-amber' : 'text-ink-2'
-                                        }`}>
-                                          {item.inStock} {mat.unit}
-                                        </span>
-                                      </div>
-                                    ))}
+                                    {(() => {
+                                      const activeSites = siteBreakdown.filter(item => 
+                                        item.inStock > 0 || movements.some(m => m.materialId === mat.id && m.projectId === item.project.id)
+                                      );
+
+                                      if (activeSites.length === 0) {
+                                        return (
+                                          <p className="text-[11px] text-muted italic py-1">
+                                            No stock or history on site yet
+                                          </p>
+                                        );
+                                      }
+
+                                      return activeSites.map(item => (
+                                        <div key={item.project.id} className="flex items-center justify-between">
+                                          <span className="text-ink truncate max-w-[130px]">
+                                            {item.project.name}
+                                          </span>
+                                          <span className={`tabular-nums font-medium ${
+                                            item.inStock <= 0 ? 'text-rust' : item.inStock <= mat.lowStockThreshold ? 'text-amber' : 'text-ink-2'
+                                          }`}>
+                                            {item.inStock} {mat.unit}
+                                          </span>
+                                        </div>
+                                      ));
+                                    })()}
                                   </div>
                                 </div>
                               )}
@@ -1008,7 +1039,14 @@ export const InventoryPage: React.FC = () => {
                           return (
                             <tr key={mat.id} className="hover:bg-ivory/30 transition-colors">
                               <td className="py-2.5 px-4 font-medium text-ink">
-                                {mat.name}
+                                <div className="flex items-center gap-2">
+                                  <span className={mat.isArchived ? 'line-through text-muted' : ''}>{mat.name}</span>
+                                  {mat.isArchived && (
+                                    <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-sand/80 text-ink-2 border border-line">
+                                      Archived
+                                    </span>
+                                  )}
+                                </div>
                               </td>
                               <td className="py-2.5 px-4 text-muted">
                                 {mat.shadeCode ? (
@@ -1034,22 +1072,35 @@ export const InventoryPage: React.FC = () => {
                               )}
                               <td className="py-2.5 px-4 text-right">
                                 <div className="inline-flex items-center gap-1.5">
-                                  <button
-                                    type="button"
-                                    onClick={() => handleOpenEditMaterial(mat)}
-                                    className="p-1 rounded text-muted hover:text-ink hover:bg-sand/40 transition-colors"
-                                    title="Edit material"
-                                  >
-                                    <Edit3 className="w-3.5 h-3.5" />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleDeleteMaterial(mat)}
-                                    className="p-1 rounded text-muted hover:text-rust hover:bg-rust-soft/50 transition-colors"
-                                    title="Delete material"
-                                  >
-                                    <Trash2 className="w-3.5 h-3.5" />
-                                  </button>
+                                  {mat.isArchived ? (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleUnarchiveMaterial(mat)}
+                                      className="px-2 py-0.5 rounded text-[11px] font-medium border border-line bg-paper text-ink hover:bg-sand/30 transition-colors"
+                                      title="Restore material to pickers"
+                                    >
+                                      Restore
+                                    </button>
+                                  ) : (
+                                    <>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleOpenEditMaterial(mat)}
+                                        className="p-1 rounded text-muted hover:text-ink hover:bg-sand/40 transition-colors"
+                                        title="Edit material"
+                                      >
+                                        <Edit3 className="w-3.5 h-3.5" />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleDeleteMaterial(mat)}
+                                        className="p-1 rounded text-muted hover:text-rust hover:bg-rust-soft/50 transition-colors"
+                                        title={movements.some(m => m.materialId === mat.id) ? "Archive material" : "Delete material"}
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    </>
+                                  )}
                                 </div>
                               </td>
                             </tr>
