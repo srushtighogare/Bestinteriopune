@@ -45,13 +45,28 @@ export type ScopeTrade = 'carpentry' | 'electrical' | 'civil' | 'painting' | 'pl
 
 const DRAFT_STORAGE_KEY = 'studioos_draft_new_project';
 
-const ROOM_PRESETS: Record<string, string[]> = {
-  '1BHK': ['Living Room', 'Kitchen', 'Bedroom', 'Balcony', 'Bathroom'],
-  '2BHK': ['Living & Dining', 'Kitchen', 'Master Bedroom', 'Kids Bedroom', 'Balcony', 'Master Bath', 'Common Bath'],
-  '3BHK': ['Living & Dining', 'Kitchen', 'Master Bedroom', 'Kids Bedroom', 'Guest Bedroom', 'Balcony', 'Master Bath', 'Common Bath'],
-  'Villa': ['Foyer & Living', 'Kitchen & Dining', 'Master Suite', 'Ground Guest Room', 'First Floor Lounge', 'Children Suite', 'Terrace & Deck', 'Powder Room'],
-  'Office': ['Reception & Waiting', 'Open Work Hall', 'Conference Room', 'Executive Cabin 1', 'Executive Cabin 2', 'Pantry & Breakout', 'Restrooms'],
-  'Custom': ['Living Room', 'Kitchen', 'Bedroom', 'Bathroom'],
+const getRoomPresets = (): Record<string, string[]> => {
+  const templates = settingsService.getRoomTemplates();
+  return {
+    ...templates,
+    Custom: templates['Custom'] || ['Living Room', 'Kitchen', 'Bedroom', 'Bathroom'],
+  };
+};
+
+const getDefaultTradeMatrixRow = (): Record<ScopeTrade, boolean> => {
+  const settings = settingsService.getTradesSettings();
+  const map: Record<string, boolean> = {};
+  settings.forEach(s => {
+    map[s.id] = s.defaultOn;
+  });
+  return {
+    carpentry: map['carpentry'] ?? true,
+    electrical: map['electrical'] ?? true,
+    civil: map['civil'] ?? true,
+    painting: map['painting'] ?? true,
+    plumbing: map['plumbing'] ?? true,
+    false_ceiling: map['false_ceiling'] ?? true,
+  };
 };
 
 const ALL_TRADES: ScopeTrade[] = [
@@ -120,23 +135,15 @@ export const NewProjectPage: React.FC = () => {
   // STEP 2: ROOMS
   const [selectedPreset, setSelectedPreset] = useState<string>('3BHK');
   const [rooms, setRooms] = useState<{ id: string; name: string }[]>(() => 
-    ROOM_PRESETS['3BHK'].map(r => ({ id: crypto.randomUUID(), name: r }))
+    (getRoomPresets()['3BHK'] || []).map(r => ({ id: crypto.randomUUID(), name: r }))
   );
   const [newRoomInput, setNewRoomInput] = useState('');
 
   // STEP 3: SCOPE (roomId -> Set of active trades)
   const [scopeMatrix, setScopeMatrix] = useState<Record<string, Record<ScopeTrade, boolean>>>(() => {
     const matrix: Record<string, Record<ScopeTrade, boolean>> = {};
-    ROOM_PRESETS['3BHK'].forEach(r => {
-      // By default all trades active
-      matrix[r] = {
-        carpentry: true,
-        electrical: true,
-        civil: true,
-        painting: true,
-        plumbing: true,
-        false_ceiling: true,
-      };
+    (getRoomPresets()['3BHK'] || []).forEach(r => {
+      matrix[r] = getDefaultTradeMatrixRow();
     });
     return matrix;
   });
@@ -353,7 +360,7 @@ export const NewProjectPage: React.FC = () => {
       setAddress('');
       setType('apartment');
       setBudget('');
-      setRooms(ROOM_PRESETS['3BHK'].map(r => ({ id: crypto.randomUUID(), name: r })));
+      setRooms((getRoomPresets()['3BHK'] || []).map(r => ({ id: crypto.randomUUID(), name: r })));
       setCurrentStep(1);
       setIsDraftRestored(false);
       setDraftSavedAt(null);
@@ -363,21 +370,14 @@ export const NewProjectPage: React.FC = () => {
   // Room presets change
   const handlePresetSelect = (presetKey: string) => {
     setSelectedPreset(presetKey);
-    const presetRooms = ROOM_PRESETS[presetKey] || [];
+    const presetRooms = getRoomPresets()[presetKey] || [];
     const newRooms = presetRooms.map(r => ({ id: crypto.randomUUID(), name: r }));
     setRooms(newRooms);
 
     // Initialize scope matrix for new rooms
     const matrix: Record<string, Record<ScopeTrade, boolean>> = {};
     newRooms.forEach(r => {
-      matrix[r.id] = {
-        carpentry: true,
-        electrical: true,
-        civil: true,
-        painting: true,
-        plumbing: true,
-        false_ceiling: true,
-      };
+      matrix[r.id] = getDefaultTradeMatrixRow();
     });
     setScopeMatrix(matrix);
   };
@@ -1059,7 +1059,7 @@ export const NewProjectPage: React.FC = () => {
             <div className="space-y-2">
               <span className="text-xs text-muted font-medium block">Layout presets:</span>
               <div className="flex flex-wrap gap-2">
-                {Object.keys(ROOM_PRESETS).map(key => (
+                {Object.keys(getRoomPresets()).map(key => (
                   <button
                     key={key}
                     type="button"

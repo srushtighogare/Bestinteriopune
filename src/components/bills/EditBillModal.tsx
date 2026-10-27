@@ -201,6 +201,8 @@ export const EditBillModal: React.FC<EditBillModalProps> = ({
         vendorId,
         vendorName,
         items: updatedBillItems,
+        needsTradeLeadCheck: false,
+        tradeLeadCheckClearedAt: bill.needsTradeLeadCheck ? new Date().toISOString() : bill.tradeLeadCheckClearedAt,
       });
 
       setIsSubmitting(false);

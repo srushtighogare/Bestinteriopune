@@ -15,8 +15,10 @@ import {
   MapPin,
   Filter,
   Check,
-  ChevronDown
+  ChevronDown,
+  AlertCircle
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { Bill, Project } from '../../types';
 import { billsService } from '../../services/billsService';
 import { projectsService } from '../../services/projectsService';
@@ -34,6 +36,7 @@ export const BillsList: React.FC<BillsListProps> = ({
   canSeeAmounts,
   onUploadClick,
 }) => {
+  const { currentUser } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialStatus = (searchParams.get('status') as 'to_review' | 'reviewed') || 'all';
 
@@ -201,6 +204,16 @@ export const BillsList: React.FC<BillsListProps> = ({
       await loadBillsData();
     } catch (err) {
       console.error('Failed to mark bill as reviewed:', err);
+    }
+  };
+
+  // Confirm trade lead delivery quantities
+  const handleConfirmTradeLeadDelivery = async (billId: string) => {
+    try {
+      await billsService.confirmTradeLeadDelivery(billId, currentUser?.name || 'Office');
+      await loadBillsData();
+    } catch (err) {
+      console.error('Failed to confirm trade lead delivery:', err);
     }
   };
 
@@ -445,6 +458,12 @@ export const BillsList: React.FC<BillsListProps> = ({
                             <span>Reviewed</span>
                           </span>
                         )}
+                        {bill.needsTradeLeadCheck && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-amber/15 text-amber border border-amber/30 shrink-0" title="Recorded by trade lead — check on next visit">
+                            <Clock className="w-2.5 h-2.5" />
+                            <span>Needs check</span>
+                          </span>
+                        )}
                       </div>
 
                       {/* Project badge and metadata */}
@@ -607,6 +626,40 @@ export const BillsList: React.FC<BillsListProps> = ({
                       >
                         <Download className="w-3.5 h-3.5 text-muted" />
                         <span>Download</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Trade Lead Delivery Banner */}
+                {selectedBill.needsTradeLeadCheck && (
+                  <div className="p-3.5 rounded-xl bg-amber/10 border border-amber/30 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                    <div className="flex items-start gap-2.5">
+                      <AlertCircle className="w-4 h-4 text-amber shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold text-ink">
+                          Recorded by trade lead ({selectedBill.uploadedBy}) — check on next visit
+                        </p>
+                        <p className="text-muted text-[11px] mt-0.5">
+                          Delivery recorded without a supervisor on site. Check quantities against challan and confirm.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleConfirmTradeLeadDelivery(selectedBill.id)}
+                        className="px-3 py-1.5 rounded-lg bg-ink text-paper text-xs font-medium hover:bg-ink-2 shadow-xs transition-colors inline-flex items-center gap-1.5"
+                      >
+                        <Check className="w-3.5 h-3.5 text-paper" />
+                        <span>Confirm quantities</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenEditModal(selectedBill)}
+                        className="px-3 py-1.5 rounded-lg border border-line bg-paper text-xs font-medium text-ink hover:bg-sand/30 transition-colors"
+                      >
+                        Correct items
                       </button>
                     </div>
                   </div>

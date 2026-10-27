@@ -3,6 +3,7 @@ import { X, AlertTriangle, UserX, AlertCircle } from 'lucide-react';
 import { User } from '../../types';
 import { teamService } from '../../services/teamService';
 import { formatPhone } from '../../utils/formatters';
+import { useAuth } from '../../context/AuthContext';
 
 interface DeactivateConfirmModalProps {
   isOpen: boolean;
@@ -17,23 +18,29 @@ export const DeactivateConfirmModal: React.FC<DeactivateConfirmModalProps> = ({
   onClose,
   onSuccess,
 }) => {
+  const { currentUser } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!isOpen || !user) return null;
 
   const isOwner = user.role === 'owner';
+  const isSelf = currentUser?.id === user.id;
 
   const handleConfirm = async () => {
     if (isOwner) {
-      setError('The studio owner cannot be deactivated.');
+      setError("The studio owner can't be deactivated.");
+      return;
+    }
+    if (isSelf) {
+      setError('You cannot deactivate your own account.');
       return;
     }
 
     setIsSubmitting(true);
     setError(null);
     try {
-      const updated = await teamService.deactivate(user.id);
+      const updated = await teamService.deactivate(user.id, currentUser?.id);
       if (updated) {
         onSuccess(updated);
         onClose();
@@ -90,7 +97,11 @@ export const DeactivateConfirmModal: React.FC<DeactivateConfirmModalProps> = ({
 
           {isOwner ? (
             <div className="p-3.5 rounded-xl border border-line bg-sand/20 text-xs text-ink-2">
-              Megha Jadhav is the registered studio owner. To change studio ownership, update your studio settings.
+              Megha Jadhav is the registered studio owner. The studio owner can't be deactivated.
+            </div>
+          ) : isSelf ? (
+            <div className="p-3.5 rounded-xl border border-line bg-sand/20 text-xs text-ink-2">
+              You cannot deactivate your own account while signed in. Ask another administrator if your role needs adjusting.
             </div>
           ) : (
             <div className="space-y-3">
@@ -118,7 +129,7 @@ export const DeactivateConfirmModal: React.FC<DeactivateConfirmModalProps> = ({
             >
               Cancel
             </button>
-            {!isOwner && (
+            {!isOwner && !isSelf && (
               <button
                 type="button"
                 disabled={isSubmitting}

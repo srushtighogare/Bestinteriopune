@@ -11,7 +11,8 @@ import {
   PlusSquare, 
   MoreVertical, 
   CheckCircle2, 
-  ShieldCheck 
+  ShieldCheck,
+  Clock
 } from 'lucide-react';
 
 export const InviteOnboardingPage: React.FC = () => {
@@ -21,6 +22,7 @@ export const InviteOnboardingPage: React.FC = () => {
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [inviteUser, setInviteUser] = useState<User | null>(null);
+  const [isExpired, setIsExpired] = useState(false);
   const [createdPin, setCreatedPin] = useState('');
   const [confirmPin, setConfirmPin] = useState('');
   const [pinError, setPinError] = useState<string | null>(null);
@@ -29,14 +31,32 @@ export const InviteOnboardingPage: React.FC = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const users = await teamService.list();
-      // Match by inviteCode, name slug, or default to Gurmukh/Vijay
-      const match = users.find(u => u.inviteCode === code || u.name.toLowerCase().includes(code?.toLowerCase() || ''));
+      
+      if (!code) {
+        // Fallback to Gurmukh for demo route without param
+        const gurmukh = users.find(u => u.name.includes('Gurmukh')) || users[3];
+        setInviteUser(gurmukh);
+        return;
+      }
+
+      // Check if code is expired
+      const isCodeExpired = users.some(u => u.expiredInviteCodes?.includes(code));
+      if (isCodeExpired) {
+        setIsExpired(true);
+        return;
+      }
+
+      // Match by active inviteCode or exact slug
+      const match = users.find(u => 
+        u.inviteCode === code || 
+        (u.name.toLowerCase().replace(/[^a-z0-9]/g, '-') === code.toLowerCase() && !u.expiredInviteCodes?.includes(code))
+      );
+
       if (match) {
         setInviteUser(match);
       } else {
-        // Fallback to Gurmukh Singh for prototype demonstration
-        const gurmukh = users.find(u => u.name.includes('Gurmukh')) || users[3];
-        setInviteUser(gurmukh);
+        // Unrecognized or expired code
+        setIsExpired(true);
       }
     };
     fetchUser();
@@ -115,6 +135,52 @@ export const InviteOnboardingPage: React.FC = () => {
     }
     navigate('/app');
   };
+
+  if (isExpired) {
+    return (
+      <div className="min-h-screen bg-ivory flex flex-col justify-between p-6 max-w-md mx-auto relative selection:bg-olive-soft">
+        <div className="flex items-center justify-between text-xs text-muted">
+          <span className="font-serif text-sm font-medium text-ink">Bestinterio</span>
+          <span className="bg-sand/40 px-2 py-0.5 rounded-full text-[11px] font-medium text-muted">
+            Invite Link
+          </span>
+        </div>
+
+        <div className="w-full my-auto py-8 text-center space-y-6">
+          <div className="w-16 h-16 rounded-2xl bg-amber/15 border border-amber/30 text-amber flex items-center justify-center mx-auto shadow-sm">
+            <Clock className="w-8 h-8" strokeWidth={1.5} />
+          </div>
+          <div className="space-y-2 max-w-xs mx-auto">
+            <h1 className="font-serif text-2xl font-medium text-ink leading-tight">
+              This invite link has expired.
+            </h1>
+            <p className="text-sm text-ink-2 leading-relaxed">
+              Ask your studio for a new one.
+            </p>
+            <p className="text-xs text-muted pt-2 leading-relaxed">
+              For security, invite links expire once a PIN has been reset or a new invite link has been created.
+            </p>
+          </div>
+          <div className="pt-4 max-w-xs mx-auto">
+            <button
+              type="button"
+              onClick={() => navigate('/app/login')}
+              className="w-full h-14 rounded-2xl bg-ink text-paper text-sm font-medium hover:bg-ink-2 transition-all shadow-soft flex items-center justify-center gap-2"
+            >
+              <span>Go to sign in</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <p className="text-[11px] text-muted">
+            Bestinterio · StudioOS
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-ivory flex flex-col justify-between p-6 max-w-md mx-auto relative selection:bg-olive-soft">

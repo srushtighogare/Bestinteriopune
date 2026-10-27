@@ -40,10 +40,19 @@ export const teamService = {
     return updated;
   },
 
-  async deactivate(id: string): Promise<User | null> {
+  async deactivate(id: string, currentUserId?: string): Promise<User | null> {
+    const user = await this.get(id);
+    if (!user) return null;
+    if (user.role === 'owner') {
+      throw new Error("The studio owner can't be deactivated.");
+    }
+    if (currentUserId && currentUserId === id) {
+      throw new Error("You cannot deactivate your own account.");
+    }
+
     const updated = await this.update(id, { status: 'deactivated' });
-    const currentUserId = getItem<string>(STORAGE_KEYS.CURRENT_USER_ID, '');
-    if (currentUserId === id) {
+    const storedCurrentUserId = getItem<string>(STORAGE_KEYS.CURRENT_USER_ID, '');
+    if (storedCurrentUserId === id) {
       setItem(STORAGE_KEYS.CURRENT_USER_ID, '');
     }
     const trustedUserId = getItem<string>('studioos_trusted_user_id', '');
@@ -61,9 +70,15 @@ export const teamService = {
     const user = await this.get(id);
     if (!user) return null;
 
+    const oldCode = user.inviteCode;
+    const expired = [...(user.expiredInviteCodes || [])];
+    if (oldCode && !expired.includes(oldCode)) {
+      expired.push(oldCode);
+    }
+
     const slug = user.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const newCode = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`;
-    const updated = await this.update(id, { inviteCode: newCode });
+    const updated = await this.update(id, { inviteCode: newCode, expiredInviteCodes: expired });
     if (!updated) return null;
 
     const inviteUrl = this.generateInviteLink(newCode);

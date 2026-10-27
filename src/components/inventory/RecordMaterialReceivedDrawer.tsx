@@ -318,6 +318,7 @@ export const RecordMaterialReceivedDrawer: React.FC<RecordMaterialReceivedDrawer
         uploadedBy: currentUser?.name || 'Supervisor',
         uploadedById: currentUser?.id || 'user-default',
         items: billItems,
+        needsTradeLeadCheck: currentUser?.role === 'worker',
       });
 
       setIsSuccess(true);

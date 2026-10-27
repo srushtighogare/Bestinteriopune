@@ -22,6 +22,7 @@ export interface User {
   avatarUrl?: string;
   pin?: string; // 4-digit PIN for site app
   inviteCode?: string;
+  expiredInviteCodes?: string[];
 }
 
 export interface Studio {
@@ -33,6 +34,7 @@ export interface Studio {
   phone: string;
   logoUrl: string;
   managerCanSeeAmounts: boolean;
+  tradeLeadsCanRecordDeliveries: boolean;
 }
 
 export interface Room {
@@ -147,6 +149,9 @@ export interface Bill {
   uploadedById: string;
   createdAt: string; // ISO
   items: BillItem[];
+  needsTradeLeadCheck?: boolean; // When true, bill is tagged "Recorded by trade lead — check on next visit"
+  tradeLeadCheckClearedAt?: string;
+  tradeLeadCheckClearedBy?: string;
 }
 
 export interface Vendor {

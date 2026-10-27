@@ -496,15 +496,30 @@ export const TeamPage: React.FC = () => {
                                 <UserCheck className="w-4 h-4" />
                                 <span>Reactivate member</span>
                               </button>
+                            ) : user.role === 'owner' ? (
+                              <div
+                                className="w-full px-3.5 py-2 flex items-center gap-2.5 text-muted cursor-not-allowed opacity-50 select-none"
+                                title="The studio owner can't be deactivated"
+                              >
+                                <UserX className="w-4 h-4" />
+                                <span>Deactivate</span>
+                              </div>
+                            ) : isCurrentUser ? (
+                              <div
+                                className="w-full px-3.5 py-2 flex items-center gap-2.5 text-muted cursor-not-allowed opacity-50 select-none"
+                                title="You cannot deactivate your own account"
+                              >
+                                <UserX className="w-4 h-4" />
+                                <span>Deactivate</span>
+                              </div>
                             ) : (
                               <button
                                 type="button"
-                                disabled={user.role === 'owner'}
                                 onClick={() => {
                                   setActiveMenuUserId(null);
                                   setSelectedUserForDeactivate(user);
                                 }}
-                                className="w-full px-3.5 py-2 flex items-center gap-2.5 text-rust hover:bg-rust-soft/50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="w-full px-3.5 py-2 flex items-center gap-2.5 text-rust hover:bg-rust-soft/50 transition-colors cursor-pointer"
                               >
                                 <UserX className="w-4 h-4" />
                                 <span>Deactivate</span>
@@ -656,16 +671,28 @@ export const TeamPage: React.FC = () => {
                       >
                         Reactivate
                       </button>
+                    ) : user.role === 'owner' ? (
+                      <span
+                        className="px-2.5 py-1.5 rounded-lg border border-line/60 text-muted/60 text-xs font-medium cursor-not-allowed select-none"
+                        title="The studio owner can't be deactivated"
+                      >
+                        Deactivate
+                      </span>
+                    ) : isCurrentUser ? (
+                      <span
+                        className="px-2.5 py-1.5 rounded-lg border border-line/60 text-muted/60 text-xs font-medium cursor-not-allowed select-none"
+                        title="You cannot deactivate your own account"
+                      >
+                        Deactivate
+                      </span>
                     ) : (
-                      user.role !== 'owner' && (
-                        <button
-                          type="button"
-                          onClick={() => setSelectedUserForDeactivate(user)}
-                          className="px-2.5 py-1.5 rounded-lg border border-line text-rust text-xs font-medium hover:bg-rust-soft/50 transition-colors"
-                        >
-                          Deactivate
-                        </button>
-                      )
+                      <button
+                        type="button"
+                        onClick={() => setSelectedUserForDeactivate(user)}
+                        className="px-2.5 py-1.5 rounded-lg border border-line text-rust text-xs font-medium hover:bg-rust-soft/50 transition-colors"
+                      >
+                        Deactivate
+                      </button>
                     )}
                   </div>
                 </div>

@@ -30,9 +30,11 @@ export const STORAGE_KEYS = {
   PROGRESS_UPDATES: 'studioos_progress_updates',
   ISSUES: 'studioos_issues',
   CURRENT_USER_ID: 'studioos_current_user_id',
+  ROOM_TEMPLATES: 'studioos_room_templates',
+  TRADES_SETTINGS: 'studioos_trades_settings',
 } as const;
 
-const CURRENT_DATA_VERSION = 'v1.5_step3_dynamic_spend_dates';
+const CURRENT_DATA_VERSION = 'v1.6_step9_trade_lead_deliveries';
 
 export function getItem<T>(key: string, fallback: T): T {
   try {

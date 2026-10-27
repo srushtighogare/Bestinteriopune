@@ -13,6 +13,7 @@ export interface CreateBillInput {
   uploadedBy: string;
   uploadedById: string;
   items: Omit<BillItem, 'id' | 'billId'>[];
+  needsTradeLeadCheck?: boolean;
 }
 
 export const billsService = {
@@ -55,6 +56,7 @@ export const billsService = {
       uploadedById: input.uploadedById,
       createdAt: new Date().toISOString(),
       items,
+      needsTradeLeadCheck: input.needsTradeLeadCheck || false,
     };
 
     bills.unshift(newBill);
@@ -84,8 +86,18 @@ export const billsService = {
     if (index === -1) return null;
 
     bills[index].status = 'reviewed';
+    bills[index].needsTradeLeadCheck = false;
+    bills[index].tradeLeadCheckClearedAt = new Date().toISOString();
     setItem(STORAGE_KEYS.BILLS, bills);
     return bills[index];
+  },
+
+  async confirmTradeLeadDelivery(id: string, confirmedBy: string = 'Office'): Promise<Bill | null> {
+    return this.updateBill(id, {
+      needsTradeLeadCheck: false,
+      tradeLeadCheckClearedAt: new Date().toISOString(),
+      tradeLeadCheckClearedBy: confirmedBy,
+    });
   },
 
   async updateBill(id: string, updates: Partial<Bill>): Promise<Bill> {

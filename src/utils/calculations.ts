@@ -249,13 +249,27 @@ export function computeAttentionItems(
     }
   });
 
-  // 4. Bills waiting for review
-  const pendingBills = bills.filter(b => b.status === 'to_review');
-  if (pendingBills.length > 0) {
+  // 4. Trade lead deliveries needing checking
+  const tradeLeadBillsNeedingCheck = bills.filter(b => b.needsTradeLeadCheck && b.status === 'to_review');
+  tradeLeadBillsNeedingCheck.forEach(b => {
+    const uploaderFirstName = b.uploadedBy ? b.uploadedBy.split(' ')[0] : 'trade lead';
+    items.push({
+      id: `trade-lead-delivery-${b.id}`,
+      type: 'bills_review',
+      text: `1 delivery recorded by ${uploaderFirstName} needs checking`,
+      link: `/bills?selected=${b.id}`,
+      projectId: b.projectId,
+      severity: 'amber',
+    });
+  });
+
+  // 5. Regular bills waiting for review
+  const regularPendingBills = bills.filter(b => b.status === 'to_review' && !b.needsTradeLeadCheck);
+  if (regularPendingBills.length > 0) {
     items.push({
       id: 'bills-review-alert',
       type: 'bills_review',
-      text: `${pendingBills.length} bill${pendingBills.length > 1 ? 's' : ''} uploaded yesterday ${pendingBills.length > 1 ? 'are' : 'is'} waiting for review`,
+      text: `${regularPendingBills.length} bill${regularPendingBills.length > 1 ? 's' : ''} uploaded yesterday ${regularPendingBills.length > 1 ? 'are' : 'is'} waiting for review`,
       link: '/bills?status=to_review',
       severity: 'amber',
     });

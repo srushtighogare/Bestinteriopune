@@ -59,6 +59,7 @@ export function generateInitialData(baseDate: Date = new Date()): InitialDataBun
     phone: '+91 98220 54321',
     logoUrl: '/logo.png',
     managerCanSeeAmounts: true,
+    tradeLeadsCanRecordDeliveries: true,
   };
 
   const users: User[] = [
@@ -107,6 +108,7 @@ export function generateInitialData(baseDate: Date = new Date()): InitialDataBun
       status: 'active',
       lastActive: getRelativeDate(0, 13, 30, baseDate),
       pin: '1472',
+      inviteCode: 'gurmukh-singh',
       avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
     },
     {
@@ -757,8 +759,9 @@ export function generateInitialData(baseDate: Date = new Date()): InitialDataBun
       date: getRelativeDateString(-1, baseDate),
       status: 'to_review',
       photoUrl: '/bills/bill-sample-2.svg',
-      uploadedBy: 'Rajiv Deshmukh',
-      uploadedById: 'b1eebc99-9c0b-4ef8-bb6d-000000000003',
+      uploadedBy: 'Gurmukh Singh',
+      uploadedById: 'b1eebc99-9c0b-4ef8-bb6d-000000000004',
+      needsTradeLeadCheck: true,
       createdAt: getRelativeDate(-1, 16, 20, baseDate),
       items: [
         { id: 'e0eebc99-9c0b-4ef8-bb6d-000000000018', studioId: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', billId: 'b7eebc99-9c0b-4ef8-bb6d-00000000000a', materialId: 'f5eebc99-9c0b-4ef8-bb6d-00000000000a', materialName: 'Handles – profile', categoryId: 'd3eebc99-9c0b-4ef8-bb6d-000000000001', quantity: 24, unit: 'piece', rate: 340, amount: 8160, addToStock: true },
