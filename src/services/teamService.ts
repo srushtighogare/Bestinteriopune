@@ -41,7 +41,37 @@ export const teamService = {
   },
 
   async deactivate(id: string): Promise<User | null> {
-    return this.update(id, { status: 'deactivated' });
+    const updated = await this.update(id, { status: 'deactivated' });
+    const currentUserId = getItem<string>(STORAGE_KEYS.CURRENT_USER_ID, '');
+    if (currentUserId === id) {
+      setItem(STORAGE_KEYS.CURRENT_USER_ID, '');
+    }
+    const trustedUserId = getItem<string>('studioos_trusted_user_id', '');
+    if (trustedUserId === id) {
+      setItem('studioos_trusted_user_id', '');
+    }
+    return updated;
+  },
+
+  async reactivate(id: string): Promise<User | null> {
+    return this.update(id, { status: 'active' });
+  },
+
+  async resetPin(id: string): Promise<{ user: User; inviteUrl: string } | null> {
+    const user = await this.get(id);
+    if (!user) return null;
+
+    const slug = user.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    const newCode = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const updated = await this.update(id, { inviteCode: newCode });
+    if (!updated) return null;
+
+    const inviteUrl = this.generateInviteLink(newCode);
+    return { user: updated, inviteUrl };
+  },
+
+  async updateProjects(id: string, assignedProjectIds: string[]): Promise<User | null> {
+    return this.update(id, { assignedProjectIds });
   },
 
   async setPin(id: string, pin: string): Promise<User | null> {

@@ -12,7 +12,7 @@ import {
 import { Bill, BillItem, Category, Material, Vendor } from '../../types';
 import { billsService } from '../../services/billsService';
 import { stockService } from '../../services/stockService';
-import { formatCurrencyINR } from '../../utils/calculations';
+import { computeMaterialStockBalance, formatCurrencyINR } from '../../utils/calculations';
 
 interface EditBillModalProps {
   isOpen: boolean;
@@ -61,6 +61,8 @@ export const EditBillModal: React.FC<EditBillModalProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [negativeStockWarning, setNegativeStockWarning] = useState<string | null>(null);
+  const [bypassNegativeStockWarning, setBypassNegativeStockWarning] = useState<boolean>(false);
 
   useEffect(() => {
     const loadMetadata = async () => {
@@ -136,13 +138,45 @@ export const EditBillModal: React.FC<EditBillModalProps> = ({
     return items.reduce((sum, it) => sum + (it.quantity * it.rate), 0);
   }, [items]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setError(null);
 
     if (items.some(it => !it.materialName.trim() || it.quantity <= 0)) {
       setError('Please provide valid descriptions and quantities for all items.');
       return;
+    }
+
+    // Check if reducing a quantity would make site stock negative
+    if (!bypassNegativeStockWarning) {
+      try {
+        const movements = await stockService.getMovements(bill.projectId);
+        const negativeWarnings: string[] = [];
+
+        for (const newItem of items) {
+          if (!newItem.materialId || !newItem.addToStock) continue;
+          const oldItem = bill.items.find(bi => bi.id === newItem.id || bi.materialId === newItem.materialId);
+          if (oldItem && oldItem.addToStock && newItem.quantity < oldItem.quantity) {
+            const reduction = oldItem.quantity - newItem.quantity;
+            const mat = materials.find(m => m.id === newItem.materialId);
+            if (mat) {
+              const currentBal = computeMaterialStockBalance(mat, movements, bill.projectId);
+              if (currentBal.inStock - reduction < 0) {
+                negativeWarnings.push(
+                  `Reducing "${newItem.materialName}" from ${oldItem.quantity} to ${newItem.quantity} ${newItem.unit} will drive site stock negative (${currentBal.inStock - reduction} ${newItem.unit}), because ${currentBal.used} ${newItem.unit} was already logged as used on site.`
+                );
+              }
+            }
+          }
+        }
+
+        if (negativeWarnings.length > 0) {
+          setNegativeStockWarning(negativeWarnings.join('\n\n'));
+          return;
+        }
+      } catch (err) {
+        console.warn('Stock check failed:', err);
+      }
     }
 
     setIsSubmitting(true);
@@ -218,6 +252,40 @@ export const EditBillModal: React.FC<EditBillModalProps> = ({
             <div className="p-3 rounded-xl bg-rust-soft text-rust border border-rust/30 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
+            </div>
+          )}
+
+          {negativeStockWarning && (
+            <div className="p-4 rounded-xl bg-rust-soft border border-rust/40 text-xs space-y-3 shadow-sm">
+              <div className="flex items-start gap-2.5">
+                <AlertCircle className="w-5 h-5 text-rust shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="font-semibold text-rust">Warning: Negative Site Stock</p>
+                  <p className="text-ink-2 leading-relaxed whitespace-pre-line">
+                    {negativeStockWarning}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center justify-end gap-2.5 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setNegativeStockWarning(null)}
+                  className="px-3.5 py-1.5 rounded-lg border border-line bg-paper text-ink font-medium hover:bg-sand/30"
+                >
+                  Review quantities
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBypassNegativeStockWarning(true);
+                    setNegativeStockWarning(null);
+                    setTimeout(() => handleSubmit(), 50);
+                  }}
+                  className="px-3.5 py-1.5 rounded-lg bg-rust text-paper font-medium hover:bg-rust/90 shadow-xs"
+                >
+                  Confirm reduction anyway
+                </button>
+              </div>
             </div>
           )}
 

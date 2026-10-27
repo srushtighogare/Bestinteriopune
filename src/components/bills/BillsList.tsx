@@ -317,7 +317,7 @@ export const BillsList: React.FC<BillsListProps> = ({
                 onChange={e => setSelectedProjectFilter(e.target.value)}
                 className="w-full px-3 py-1.5 rounded-lg border border-line bg-paper text-xs text-ink focus:outline-none focus:border-ink font-medium"
               >
-                <option value="all">All sites</option>
+                <option value="all">All projects</option>
                 {projects.map(p => (
                   <option key={p.id} value={p.id}>{p.name}</option>
                 ))}

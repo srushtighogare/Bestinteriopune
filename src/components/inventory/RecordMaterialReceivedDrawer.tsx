@@ -286,61 +286,39 @@ export const RecordMaterialReceivedDrawer: React.FC<RecordMaterialReceivedDrawer
 
     setIsSubmitting(true);
     try {
-      // 1. If photo or vendor was provided, optionally create a bill record
-      let createdBillId: string | undefined = undefined;
+      // 1. Prevent double-counting: ALWAYS create ONE bill record with status "to_review"
+      // and let billsService.upload automatically record stock movements linked to that bill.
       const effectiveStudioId = studio?.id || 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
+      const fallbackBillNumber = billNumber.trim() || `REC-${billDate.replace(/-/g, '').slice(2)}-${Math.floor(100 + Math.random() * 900)}`;
 
-      if (!hasNoBill && (photoUrl || selectedVendorId)) {
-        const billItems = items.map(item => {
-          const mat = materials.find(m => m.id === item.materialId);
-          return {
-            studioId: effectiveStudioId,
-            materialId: item.materialId,
-            materialName: mat ? mat.name : 'Material',
-            categoryId: item.categoryId,
-            quantity: item.quantity,
-            unit: mat ? mat.unit : 'unit',
-            rate: item.rate,
-            amount: item.quantity * item.rate,
-            addToStock: false, // We'll add to stock directly below to maintain precise logging
-          };
-        });
-
-        const createdBill = await billsService.upload({
-          studioId: effectiveStudioId,
-          projectId: selectedProjectId,
-          vendorId: selectedVendorId || 'vendor-direct',
-          vendorName: currentVendor ? currentVendor.name : 'Direct Material Supplier',
-          billNumber: billNumber || `REC-${Date.now().toString().slice(-4)}`,
-          date: billDate,
-          photoUrl: photoUrl || '/bills/bill-sample-1.svg',
-          uploadedBy: currentUser?.name || 'Megha Jadhav',
-          uploadedById: currentUser?.id || 'user-default',
-          items: billItems,
-        });
-
-        createdBillId = createdBill.id;
-      }
-
-      // 2. Record received stock movements for each item
-      for (const item of items) {
+      const billItems = items.map(item => {
         const mat = materials.find(m => m.id === item.materialId);
-        const itemNote = deliveryNote 
-          ? deliveryNote 
-          : createdBillId 
-          ? `Received via Bill ${billNumber || createdBillId}`
-          : 'Direct site delivery';
-
-        await stockService.recordReceived({
+        const itemRate = canSeeAmounts ? (item.rate || 0) : 0;
+        return {
           studioId: effectiveStudioId,
-          projectId: selectedProjectId,
           materialId: item.materialId,
+          materialName: mat ? (mat.shadeCode ? `${mat.name} (${mat.shadeCode})` : mat.name) : 'Material',
+          categoryId: item.categoryId,
           quantity: item.quantity,
-          billId: createdBillId,
-          workerName: currentUser?.name || 'Supervisor',
-          note: itemNote,
-        });
-      }
+          unit: mat ? mat.unit : 'unit',
+          rate: itemRate,
+          amount: item.quantity * itemRate,
+          addToStock: true, // Creates received movement linked to this bill
+        };
+      });
+
+      await billsService.upload({
+        studioId: effectiveStudioId,
+        projectId: selectedProjectId,
+        vendorId: selectedVendorId || 'vendor-direct',
+        vendorName: currentVendor ? currentVendor.name : 'Direct Material Delivery',
+        billNumber: fallbackBillNumber,
+        date: billDate,
+        photoUrl: photoUrl || '/bills/bill-sample-1.svg',
+        uploadedBy: currentUser?.name || 'Supervisor',
+        uploadedById: currentUser?.id || 'user-default',
+        items: billItems,
+      });
 
       setIsSuccess(true);
       setTimeout(() => {

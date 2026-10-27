@@ -40,7 +40,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const userId = getItem<string>(STORAGE_KEYS.CURRENT_USER_ID, 'b1eebc99-9c0b-4ef8-bb6d-000000000001');
     if (userId) {
       const user = await teamService.get(userId);
-      setCurrentUser(user || null);
+      if (user && user.status === 'deactivated') {
+        setCurrentUser(null);
+        setItem(STORAGE_KEYS.CURRENT_USER_ID, '');
+      } else {
+        setCurrentUser(user || null);
+      }
     } else {
       setCurrentUser(null);
     }
@@ -49,7 +54,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const trustedId = getItem<string>('studioos_trusted_user_id', 'b1eebc99-9c0b-4ef8-bb6d-000000000004');
     if (trustedId) {
       const tUser = await teamService.get(trustedId);
-      setTrustedUserState(tUser || null);
+      if (tUser && tUser.status === 'deactivated') {
+        setTrustedUserState(null);
+        setItem('studioos_trusted_user_id', '');
+      } else {
+        setTrustedUserState(tUser || null);
+      }
     }
 
     setIsDemoMode(getItem<boolean>('studioos_is_demo_mode', false));
@@ -65,9 +75,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       loadUser();
     };
 
+    const handleStorageChange = (e: Event) => {
+      const detail = (e as CustomEvent)?.detail;
+      if (!detail || detail.key === STORAGE_KEYS.USERS || detail.key === STORAGE_KEYS.CURRENT_USER_ID || detail.key === 'studioos_trusted_user_id') {
+        loadUser();
+      }
+    };
+
     window.addEventListener('studioos_storage_reset', handleStorageReset);
+    window.addEventListener('studioos_storage_change', handleStorageChange);
     return () => {
       window.removeEventListener('studioos_storage_reset', handleStorageReset);
+      window.removeEventListener('studioos_storage_change', handleStorageChange);
     };
   }, []);
 

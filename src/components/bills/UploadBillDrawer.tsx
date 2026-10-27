@@ -91,6 +91,11 @@ export const UploadBillDrawer: React.FC<UploadBillDrawerProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [duplicateWarning, setDuplicateWarning] = useState<{
+    existingBill: any;
+    message: string;
+  } | null>(null);
+  const [bypassDuplicateCheck, setBypassDuplicateCheck] = useState<boolean>(false);
 
   // Load reference data
   useEffect(() => {
@@ -312,8 +317,8 @@ export const UploadBillDrawer: React.FC<UploadBillDrawerProps> = ({
   }, [items]);
 
   // Submit Handler
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setError(null);
 
     if (!selectedProjectId) {
@@ -333,6 +338,41 @@ export const UploadBillDrawer: React.FC<UploadBillDrawerProps> = ({
 
     const currentVendor = vendors.find(v => v.id === selectedVendorId);
     const effectiveStudioId = studio?.id || 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
+
+    // Duplicate delivery check: same project + vendor + date (±2 days) with overlapping materials
+    if (!bypassDuplicateCheck) {
+      try {
+        const existingBills = await billsService.list(selectedProjectId);
+        const targetDate = new Date(billDate).getTime();
+        const twoDaysMs = 2 * 24 * 60 * 60 * 1000;
+
+        const duplicate = existingBills.find(b => {
+          if (b.projectId !== selectedProjectId) return false;
+          const matchVendor = b.vendorId === selectedVendorId || 
+            b.vendorName.toLowerCase() === (currentVendor?.name || '').toLowerCase();
+          if (!matchVendor) return false;
+
+          const bDate = new Date(b.date).getTime();
+          if (isNaN(bDate) || isNaN(targetDate)) return false;
+          if (Math.abs(bDate - targetDate) > twoDaysMs) return false;
+
+          // Check overlapping materials
+          return b.items.some(bItem => 
+            items.some(it => it.materialId && it.materialId === bItem.materialId)
+          );
+        });
+
+        if (duplicate) {
+          setDuplicateWarning({
+            existingBill: duplicate,
+            message: `This looks like a delivery already recorded on ${duplicate.date} by ${duplicate.uploadedBy}. Open that bill instead?`,
+          });
+          return;
+        }
+      } catch (err) {
+        console.warn('Duplicate check failed, proceeding:', err);
+      }
+    }
 
     setIsSubmitting(true);
     try {
@@ -422,6 +462,46 @@ export const UploadBillDrawer: React.FC<UploadBillDrawerProps> = ({
               <div className="p-3.5 rounded-xl bg-rust-soft text-rust border border-rust/30 text-xs flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
+              </div>
+            )}
+
+            {duplicateWarning && (
+              <div className="p-4 rounded-xl bg-amber-soft border border-amber/40 text-xs space-y-3 shadow-sm">
+                <div className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="font-semibold text-ink">Possible duplicate delivery found</p>
+                    <p className="text-ink-2 leading-relaxed">
+                      {duplicateWarning.message}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-end gap-2.5 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      const url = new URL(window.location.href);
+                      url.pathname = '/bills';
+                      url.searchParams.set('selected', duplicateWarning.existingBill.id);
+                      window.location.href = url.toString();
+                    }}
+                    className="px-3.5 py-1.5 rounded-lg bg-ink text-paper font-medium hover:bg-ink-2 shadow-xs transition-colors"
+                  >
+                    Open existing
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBypassDuplicateCheck(true);
+                      setDuplicateWarning(null);
+                      setTimeout(() => handleSubmit(), 50);
+                    }}
+                    className="px-3.5 py-1.5 rounded-lg border border-line bg-paper text-ink font-medium hover:bg-sand/40 transition-colors"
+                  >
+                    Save as new anyway
+                  </button>
+                </div>
               </div>
             )}
 
