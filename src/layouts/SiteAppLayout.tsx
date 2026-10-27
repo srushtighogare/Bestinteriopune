@@ -27,6 +27,21 @@ export const SiteAppLayout: React.FC = () => {
                     location.pathname !== '/app/stock' && 
                     location.pathname !== '/app/me';
 
+  const getSubpageTitle = () => {
+    if (location.pathname === '/app/received') return 'Material received';
+    if (location.pathname === '/app/used') return 'Material used';
+    if (location.pathname === '/app/progress') return 'Progress update';
+    if (location.pathname === '/app/problem') return 'Report problem';
+    if (location.pathname === '/app/stock-check') return 'Stock check';
+    return 'Site Action';
+  };
+
+  const formattedDate = new Intl.DateTimeFormat('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date());
+
   return (
     <div className="min-h-screen bg-sand/30 flex flex-col items-center justify-start text-ink selection:bg-olive-soft">
       {/* Top desktop helper toolbar (only visible on wider screens to aid prototype evaluation) */}
@@ -35,7 +50,7 @@ export const SiteAppLayout: React.FC = () => {
           <span className="inline-block w-2 h-2 rounded-full bg-olive animate-pulse" />
           <span className="font-medium text-ink">Site App (Mobile View)</span>
           <span className="text-muted/60">|</span>
-          <span>Logged in as: <strong className="text-ink">{currentUser?.name || 'Worker'}</strong> ({currentUser?.role})</span>
+          <span>Logged in as: <strong className="text-ink">{currentUser?.name || 'Worker'}</strong> ({currentUser?.role}{currentUser?.trade ? ` · ${currentUser.trade}` : ''})</span>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -54,7 +69,7 @@ export const SiteAppLayout: React.FC = () => {
         </div>
       </aside>
 
-      {/* Mobile container: 390-430px wide, centered */}
+      {/* Mobile container: 375-430px wide, centered */}
       <div 
         className={cn(
           "w-full bg-ivory flex flex-col min-h-screen transition-all",
@@ -62,13 +77,13 @@ export const SiteAppLayout: React.FC = () => {
         )}
       >
         {/* Mobile Header */}
-        <header className="sticky top-0 z-30 bg-paper/95 backdrop-blur-sm border-b border-line/70 px-4 py-3.5 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
+        <header className="sticky top-0 z-30 bg-paper/95 backdrop-blur-sm border-b border-line/70 px-4 py-3 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2.5">
             {isSubpage ? (
               <button
-                onClick={() => navigate(-1)}
-                className="w-10 h-10 -ml-1 flex items-center justify-center rounded-full active:bg-sand/50 text-ink transition-colors"
-                aria-label="Go back"
+                onClick={() => navigate('/app')}
+                className="w-12 h-12 -ml-2 flex items-center justify-center rounded-full active:bg-sand/50 text-ink transition-colors"
+                aria-label="Go back to Home"
               >
                 <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
               </button>
@@ -77,7 +92,7 @@ export const SiteAppLayout: React.FC = () => {
             )}
             <div>
               <h1 className="font-serif text-base font-semibold text-ink leading-tight">
-                {isSubpage ? 'Site Action' : 'Bestinterio'}
+                {isSubpage ? getSubpageTitle() : 'Bestinterio'}
               </h1>
               <p className="text-[11px] text-muted leading-tight font-medium">
                 {currentUser?.name ? `Hi ${currentUser.name.split(' ')[0]}` : 'Site Operations'}
@@ -86,8 +101,8 @@ export const SiteAppLayout: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-medium text-muted bg-sand/30 border border-line/60 px-2 py-0.5 rounded-full">
-              26 Oct 2026
+            <span className="text-[11px] font-medium text-muted bg-sand/30 border border-line/60 px-2.5 py-0.5 rounded-full tabular-nums">
+              {formattedDate}
             </span>
           </div>
         </header>
@@ -97,9 +112,9 @@ export const SiteAppLayout: React.FC = () => {
           <Outlet />
         </main>
 
-        {/* Bottom Navigation (Fixed at bottom of mobile view, max 3 items) */}
+        {/* Bottom Navigation (Fixed at bottom of mobile view, max 3 items: Home, Stock, Me) */}
         {!isSubpage && (
-          <nav className="sticky bottom-0 left-0 right-0 z-30 bg-paper/95 backdrop-blur-md border-t border-line px-3 py-1.5 flex items-center justify-around shrink-0">
+          <nav className="sticky bottom-0 left-0 right-0 z-30 bg-paper/95 backdrop-blur-md border-t border-line px-3 py-1 flex items-center justify-around shrink-0">
             {BOTTOM_NAV_ITEMS.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.to;
