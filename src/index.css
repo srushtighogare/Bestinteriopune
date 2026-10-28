@@ -61,3 +61,44 @@
 button, a {
   transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Print Styles for A4 Portrait Summary Sheet */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
+
+  body {
+    background-color: #ffffff !important;
+    color: #2A2925 !important;
+    font-size: 11pt;
+    line-height: 1.4;
+  }
+
+  /* Prevent page breaks inside cards, images, and tables */
+  .break-inside-avoid,
+  table,
+  tr,
+  img,
+  section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Force page break for internal records page */
+  .break-before-page {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  /* Clean up borders and backgrounds for sharp print */
+  #printable-summary-sheet {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}

@@ -54,6 +54,7 @@ export const ReportProblemPage: React.FC = () => {
   const [selectedType, setSelectedType] = useState<IssueType>('material_missing');
   const [description, setDescription] = useState<string>('');
   const [photoUrl, setPhotoUrl] = useState<string>('');
+  const [needsCustomerAction, setNeedsCustomerAction] = useState<boolean>(false);
 
   // Status
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -147,6 +148,7 @@ export const ReportProblemPage: React.FC = () => {
         description: description.trim(),
         photoUrl: photoUrl || undefined,
         reportedBy: currentUser?.name || 'Site Member',
+        needsCustomerAction,
       });
 
       setIsSuccess(true);
@@ -289,18 +291,30 @@ export const ReportProblemPage: React.FC = () => {
         </div>
 
         {/* 4. Problem Description / Note */}
-        <div className="space-y-1.5 p-4 rounded-2xl bg-paper border border-line">
-          <label className="text-xs font-semibold uppercase tracking-wider text-muted block">
-            {t('prob.description', lang)} *
+        <div className="space-y-3 p-4 rounded-2xl bg-paper border border-line">
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wider text-muted block mb-1">
+              {t('prob.description', lang)} *
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Explain what happened or what is blocked so the office can help..."
+              rows={3}
+              className="w-full p-3 rounded-xl border border-line bg-ivory text-xs text-ink placeholder:text-muted/60 focus:outline-none focus:border-ink transition-colors resize-none"
+              required
+            />
+          </div>
+
+          <label className="flex items-center gap-2.5 pt-1 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={needsCustomerAction}
+              onChange={(e) => setNeedsCustomerAction(e.target.checked)}
+              className="w-4 h-4 rounded border-line text-ink focus:ring-ink"
+            />
+            <span className="text-xs text-ink font-medium">Customer action needed</span>
           </label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Explain what happened or what is blocked so the office can help..."
-            rows={3}
-            className="w-full p-3 rounded-xl border border-line bg-ivory text-xs text-ink placeholder:text-muted/60 focus:outline-none focus:border-ink transition-colors resize-none"
-            required
-          />
         </div>
 
         {/* 5. Optional Photo */}

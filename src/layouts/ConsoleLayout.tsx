@@ -40,7 +40,7 @@ export const ConsoleLayout: React.FC = () => {
   return (
     <div className="min-h-screen bg-ivory flex flex-col md:flex-row text-ink selection:bg-olive-soft selection:text-ink">
       {/* Mobile top bar */}
-      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-paper border-b border-line sticky top-0 z-40">
+      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-paper border-b border-line sticky top-0 z-40 print:hidden">
         <div className="flex items-center gap-3">
           <img src="/logo.png" alt="Bestinterio" className="w-8 h-8 object-contain aspect-square" />
           <span className="font-serif text-lg font-medium text-ink">Bestinterio</span>
@@ -67,7 +67,7 @@ export const ConsoleLayout: React.FC = () => {
       {/* Sidebar (Desktop 240px, tablet collapsible, mobile overlay) */}
       <aside
         className={cn(
-          "fixed md:sticky top-0 bottom-0 left-0 z-30 flex flex-col w-60 bg-paper border-r border-line transition-transform duration-200 ease-in-out md:translate-x-0 md:h-screen",
+          "fixed md:sticky top-0 bottom-0 left-0 z-30 flex flex-col w-60 bg-paper border-r border-line transition-transform duration-200 ease-in-out md:translate-x-0 md:h-screen print:hidden",
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
       >
@@ -174,8 +174,8 @@ export const ConsoleLayout: React.FC = () => {
       )}
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0">
-        <div className="flex-1 w-full max-w-[1240px] mx-auto p-4 sm:p-6 md:p-8 lg:p-10">
+      <main className="flex-1 flex flex-col min-w-0 print:p-0 print:m-0 print:w-full">
+        <div className="flex-1 w-full max-w-[1240px] mx-auto p-4 sm:p-6 md:p-8 lg:p-10 print:p-0 print:max-w-none">
           <Outlet />
         </div>
       </main>

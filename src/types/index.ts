@@ -198,6 +198,7 @@ export interface Issue {
   reportedAt: string; // ISO
   status: 'open' | 'resolved';
   resolvedAt?: string;
+  needsCustomerAction?: boolean;
 }
 
 export type StockLevelStatus = 'in_stock' | 'running_low' | 'out_of_stock';

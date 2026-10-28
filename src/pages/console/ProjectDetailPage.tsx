@@ -816,7 +816,14 @@ export const ProjectDetailPage: React.FC = () => {
                       className="p-3 rounded-xl border border-line hover:border-sand-dark bg-paper cursor-pointer transition-all space-y-1"
                     >
                       <div className="flex items-center justify-between text-xs">
-                        <span className="font-medium text-ink">{issue.roomName || 'General'}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-ink">{issue.roomName || 'General'}</span>
+                          {(issue.needsCustomerAction || issue.type === 'design_question') && (
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-soft text-amber border border-amber/30">
+                              Customer action
+                            </span>
+                          )}
+                        </div>
                         <span className="text-[10px] text-muted capitalize">{issue.type.replace('_', ' ')}</span>
                       </div>
                       <p className="text-xs text-muted leading-relaxed line-clamp-2">{issue.description}</p>

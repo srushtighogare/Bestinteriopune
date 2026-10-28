@@ -977,6 +977,7 @@ export function generateInitialData(baseDate: Date = new Date()): InitialDataBun
       status: 'open',
       reportedBy: 'Gurmukh Singh',
       reportedAt: getRelativeDate(-3, 14, 30, baseDate),
+      needsCustomerAction: true,
     },
     {
       id: 'faeebc99-9c0b-4ef8-bb6d-000000000002',

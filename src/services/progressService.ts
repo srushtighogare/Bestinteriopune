@@ -24,6 +24,7 @@ export interface CreateIssueInput {
   description: string;
   photoUrl?: string;
   reportedBy: string;
+  needsCustomerAction?: boolean;
 }
 
 export const progressService = {
@@ -126,11 +127,22 @@ export const progressService = {
       reportedBy: input.reportedBy,
       reportedAt: new Date().toISOString(),
       status: 'open',
+      needsCustomerAction: input.needsCustomerAction || false,
     };
 
     issues.unshift(newIssue);
     setItem(STORAGE_KEYS.ISSUES, issues);
     return newIssue;
+  },
+
+  async updateIssue(id: string, updates: Partial<Issue>): Promise<Issue | null> {
+    const issues = getItem<Issue[]>(STORAGE_KEYS.ISSUES, []);
+    const index = issues.findIndex(i => i.id === id);
+    if (index === -1) return null;
+
+    issues[index] = { ...issues[index], ...updates };
+    setItem(STORAGE_KEYS.ISSUES, issues);
+    return issues[index];
   },
 
   async resolveIssue(id: string): Promise<Issue | null> {
