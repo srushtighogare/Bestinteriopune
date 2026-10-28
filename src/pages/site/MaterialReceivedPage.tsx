@@ -23,6 +23,7 @@ import { projectsService } from '../../services/projectsService';
 import { settingsService } from '../../services/settingsService';
 import { Category, Material, Project, Vendor } from '../../types';
 import { getActiveSiteProjectId } from '../../utils/siteState';
+import { getSiteLanguage, SiteLanguage, t } from '../../utils/i18n';
 
 interface ReceivedItemEntry {
   id: string;
@@ -35,7 +36,14 @@ export const MaterialReceivedPage: React.FC = () => {
   const { currentUser, role } = useAuth();
   const navigate = useNavigate();
 
+  const [lang, setLang] = useState<SiteLanguage>(getSiteLanguage());
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const handleLang = () => setLang(getSiteLanguage());
+    window.addEventListener('studioos_language_change', handleLang);
+    return () => window.removeEventListener('studioos_language_change', handleLang);
+  }, []);
   const [projects, setProjects] = useState<Project[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [materials, setMaterials] = useState<Material[]>([]);
@@ -331,9 +339,9 @@ export const MaterialReceivedPage: React.FC = () => {
     <div className="space-y-5 max-w-md mx-auto pb-28">
       {/* Title */}
       <div className="space-y-1">
-        <h2 className="font-serif text-2xl font-medium text-ink">Record material received</h2>
+        <h2 className="font-serif text-2xl font-medium text-ink">{t('recv.title', lang)}</h2>
         <p className="text-xs text-muted">
-          Increases site stock immediately and records challan for office review
+          {t('recv.subtitle', lang)}
         </p>
       </div>
 
@@ -394,7 +402,7 @@ export const MaterialReceivedPage: React.FC = () => {
         {/* 2. Photo of Bill / Challan */}
         <div className="space-y-2">
           <label className="text-xs font-semibold uppercase tracking-wider text-muted block">
-            Challan or Bill Photo
+            {t('recv.challan_photo', lang)}
           </label>
 
           {photoUrl ? (
@@ -685,7 +693,7 @@ export const MaterialReceivedPage: React.FC = () => {
                 <span>Delivery saved!</span>
               </>
             ) : (
-              <span>Record delivery ({items.length} item{items.length === 1 ? '' : 's'})</span>
+              <span>{t('recv.submit_button', lang)} ({items.length} item{items.length === 1 ? '' : 's'})</span>
             )}
           </button>
         </div>

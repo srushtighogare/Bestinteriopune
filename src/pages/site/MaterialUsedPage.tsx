@@ -18,11 +18,13 @@ import { stockService } from '../../services/stockService';
 import { projectsService } from '../../services/projectsService';
 import { Category, Material, MaterialStockBalance, Project, Room } from '../../types';
 import { getActiveSiteProjectId, setActiveSiteProjectId } from '../../utils/siteState';
+import { getSiteLanguage, SiteLanguage, t } from '../../utils/i18n';
 
 export const MaterialUsedPage: React.FC = () => {
   const { currentUser, role } = useAuth();
   const navigate = useNavigate();
 
+  const [lang, setLang] = useState<SiteLanguage>(getSiteLanguage());
   const [isLoading, setIsLoading] = useState(true);
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string>('');
@@ -48,6 +50,12 @@ export const MaterialUsedPage: React.FC = () => {
   const activeProject = useMemo(() => {
     return projects.find((p) => p.id === selectedProjectId) || null;
   }, [projects, selectedProjectId]);
+
+  useEffect(() => {
+    const handleLang = () => setLang(getSiteLanguage());
+    window.addEventListener('studioos_language_change', handleLang);
+    return () => window.removeEventListener('studioos_language_change', handleLang);
+  }, []);
 
   // Load Projects, Categories, Materials, and Stock Balances
   useEffect(() => {
@@ -251,9 +259,9 @@ export const MaterialUsedPage: React.FC = () => {
     <div className="space-y-4 max-w-md mx-auto pb-32">
       {/* Title */}
       <div className="space-y-1">
-        <h2 className="font-serif text-2xl font-medium text-ink">Material used</h2>
+        <h2 className="font-serif text-2xl font-medium text-ink">{t('used.title', lang)}</h2>
         <p className="text-xs text-muted">
-          Log materials installed or consumed on site today
+          {t('used.subtitle', lang)}
         </p>
       </div>
 
@@ -297,9 +305,9 @@ export const MaterialUsedPage: React.FC = () => {
       <div className="space-y-2">
         <div className="flex items-center justify-between px-1">
           <span className="text-[11px] uppercase font-semibold tracking-wider text-muted">
-            Room / Area
+            {t('used.room_area', lang)}
           </span>
-          <span className="text-xs text-ink font-medium">Selected: {selectedRoomName}</span>
+          <span className="text-xs text-ink font-medium">{t('used.selected_room', lang)}: {selectedRoomName}</span>
         </div>
 
         <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
@@ -311,7 +319,7 @@ export const MaterialUsedPage: React.FC = () => {
                   key={room.id}
                   type="button"
                   onClick={() => handleRoomSelect(room)}
-                  className={`h-11 px-3.5 rounded-xl text-xs font-medium shrink-0 transition-all border ${
+                  className={`h-12 min-h-[48px] px-4 rounded-xl text-xs font-medium shrink-0 transition-all border flex items-center justify-center ${
                     isSelected
                       ? 'bg-ink text-paper border-ink shadow-xs'
                       : 'bg-paper text-ink border-line hover:bg-sand/30'
@@ -333,7 +341,7 @@ export const MaterialUsedPage: React.FC = () => {
                       setSelectedRoomId(`custom-${idx}`);
                       setSelectedRoomName(rName);
                     }}
-                    className={`h-11 px-3.5 rounded-xl text-xs font-medium shrink-0 transition-all border ${
+                    className={`h-12 min-h-[48px] px-4 rounded-xl text-xs font-medium shrink-0 transition-all border flex items-center justify-center ${
                       isSelected
                         ? 'bg-ink text-paper border-ink shadow-xs'
                         : 'bg-paper text-ink border-line hover:bg-sand/30'
@@ -471,7 +479,9 @@ export const MaterialUsedPage: React.FC = () => {
                             <div className="mt-2.5 p-2.5 rounded-lg bg-amber/15 border border-amber/30 text-[11px] text-ink flex items-start gap-2">
                               <AlertTriangle className="w-3.5 h-3.5 text-amber shrink-0 mt-0.5" />
                               <p className="leading-snug">
-                                Selected <strong>{qty}</strong> exceeds site stock (<strong>{currentStock}</strong> {mat.unit}s). You can still submit — this will flag an over-stock use for the office to check.
+                                {lang === 'hi' 
+                                  ? `स्टॉक में केवल ${currentStock} ${mat.unit} उपलब्ध है। यदि कोई डिलीवरी छूटी है, तो अपने सुपरवाइजर को बताएं।`
+                                  : `Only ${currentStock} ${mat.unit}${currentStock === 1 ? '' : 's'} in stock. If a delivery is missing, tell your supervisor.`}
                               </p>
                             </div>
                           )}
@@ -523,8 +533,8 @@ export const MaterialUsedPage: React.FC = () => {
           ) : (
             <span>
               {selectedEntries.length > 0
-                ? `Submit material used (${selectedEntries.length} items)`
-                : 'Select materials used'}
+                ? `${t('used.submit_button', lang)} (${selectedEntries.length})`
+                : t('used.select_items', lang)}
             </span>
           )}
         </button>

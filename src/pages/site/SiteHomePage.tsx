@@ -24,6 +24,7 @@ import { getItem, STORAGE_KEYS } from '../../services/storage';
 import { Project, Bill, StockMovement, ProgressUpdate, Issue, Studio } from '../../types';
 import { getActiveSiteProjectId, setActiveSiteProjectId } from '../../utils/siteState';
 import { SupervisorCorrectDeliveryModal } from '../../components/site/SupervisorCorrectDeliveryModal';
+import { getSiteLanguage, SiteLanguage, t } from '../../utils/i18n';
 
 interface TodayActivity {
   id: string;
@@ -37,6 +38,7 @@ export const SiteHomePage: React.FC = () => {
   const { currentUser, role } = useAuth();
   const navigate = useNavigate();
 
+  const [lang, setLang] = useState<SiteLanguage>(getSiteLanguage());
   const [isLoading, setIsLoading] = useState(true);
   const [studio, setStudio] = useState<Studio | null>(null);
   const [assignedProjects, setAssignedProjects] = useState<Project[]>([]);
@@ -185,11 +187,17 @@ export const SiteHomePage: React.FC = () => {
       loadSiteData();
     };
 
+    const handleLangChange = () => {
+      setLang(getSiteLanguage());
+    };
+
     window.addEventListener('studioos_storage_change', handleStorageChange);
     window.addEventListener('studioos_storage_reset', handleStorageChange);
+    window.addEventListener('studioos_language_change', handleLangChange);
     return () => {
       window.removeEventListener('studioos_storage_change', handleStorageChange);
       window.removeEventListener('studioos_storage_reset', handleStorageChange);
+      window.removeEventListener('studioos_language_change', handleLangChange);
     };
   }, [currentUser?.id, role]);
 
@@ -235,7 +243,7 @@ export const SiteHomePage: React.FC = () => {
           <div className="flex items-center justify-between">
             <span className="text-[11px] uppercase font-semibold tracking-wider text-muted flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-olive" />
-              <span>Active Site</span>
+              <span>{t('home.active_site', lang)}</span>
             </span>
 
             {/* If assigned to multiple sites, allow switching */}
@@ -246,7 +254,7 @@ export const SiteHomePage: React.FC = () => {
                 className="h-9 px-3 rounded-xl border border-line bg-ivory text-ink text-xs font-medium hover:bg-sand/30 active:scale-95 transition-all inline-flex items-center gap-1.5"
                 aria-label="Switch site"
               >
-                <span>Switch site</span>
+                <span>{t('home.switch_site', lang)}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-muted" />
               </button>
             )}
@@ -271,7 +279,7 @@ export const SiteHomePage: React.FC = () => {
           </div>
 
           <div className="mt-3.5 pt-3 border-t border-line/60 flex items-center justify-between text-xs">
-            <span className="text-muted">Today's focus</span>
+            <span className="text-muted">{t('home.todays_focus', lang)}</span>
             <span className="text-ink font-medium">
               {activeProject?.currentFocus || 'On-site execution'}
             </span>
@@ -375,7 +383,7 @@ export const SiteHomePage: React.FC = () => {
       {/* 3. Role-Based Action Tiles */}
       <section aria-label="Site Actions" className="space-y-2">
         <span className="text-[11px] uppercase tracking-wider text-muted font-semibold block px-1">
-          Actions
+          {t('home.actions', lang)}
         </span>
 
         {isSupervisor ? (
@@ -393,10 +401,10 @@ export const SiteHomePage: React.FC = () => {
                 </div>
                 <div className="text-left">
                   <span className="text-sm font-semibold text-ink block leading-tight">
-                    Material received
+                    {t('home.material_received', lang)}
                   </span>
                   <span className="text-xs text-muted leading-tight mt-0.5 block">
-                    Bill or challan photo
+                    {t('home.material_received_sub', lang)}
                   </span>
                 </div>
               </div>
@@ -415,10 +423,10 @@ export const SiteHomePage: React.FC = () => {
                 </div>
                 <div className="text-left">
                   <span className="text-sm font-semibold text-ink block leading-tight">
-                    Material used
+                    {t('home.material_used', lang)}
                   </span>
                   <span className="text-xs text-muted leading-tight mt-0.5 block">
-                    Log items used today
+                    {t('home.material_used_sub', lang)}
                   </span>
                 </div>
               </div>
@@ -437,10 +445,10 @@ export const SiteHomePage: React.FC = () => {
                 </div>
                 <div className="text-left">
                   <span className="text-sm font-semibold text-ink block leading-tight">
-                    Progress update
+                    {t('home.progress_update', lang)}
                   </span>
                   <span className="text-xs text-muted leading-tight mt-0.5 block">
-                    Photos &amp; status
+                    {t('home.progress_update_sub', lang)}
                   </span>
                 </div>
               </div>
@@ -459,10 +467,10 @@ export const SiteHomePage: React.FC = () => {
                 </div>
                 <div className="text-left">
                   <span className="text-sm font-semibold text-ink block leading-tight">
-                    Stock check
+                    {t('home.stock_check', lang)}
                   </span>
                   <span className="text-xs text-muted leading-tight mt-0.5 block">
-                    Count site stock
+                    {t('home.stock_check_sub', lang)}
                   </span>
                 </div>
               </div>
@@ -481,10 +489,10 @@ export const SiteHomePage: React.FC = () => {
                 </div>
                 <div className="text-left">
                   <span className="text-sm font-semibold text-ink block leading-tight">
-                    Report a problem
+                    {t('home.report_problem', lang)}
                   </span>
                   <span className="text-xs text-muted leading-tight mt-0.5 block">
-                    Flag an issue or delay
+                    {t('home.report_problem_sub', lang)}
                   </span>
                 </div>
               </div>
@@ -506,10 +514,10 @@ export const SiteHomePage: React.FC = () => {
                 </div>
                 <div className="text-left">
                   <span className="text-base font-semibold text-ink block leading-tight">
-                    Material used
+                    {t('home.material_used', lang)}
                   </span>
                   <span className="text-xs text-muted leading-tight mt-0.5 block">
-                    Log items used today
+                    {t('home.material_used_sub', lang)}
                   </span>
                 </div>
               </div>
@@ -528,10 +536,10 @@ export const SiteHomePage: React.FC = () => {
                 </div>
                 <div className="text-left">
                   <span className="text-base font-semibold text-ink block leading-tight">
-                    Work done
+                    {t('home.work_done', lang)}
                   </span>
                   <span className="text-xs text-muted leading-tight mt-0.5 block">
-                    Photos &amp; updates
+                    {t('home.work_done_sub', lang)}
                   </span>
                 </div>
               </div>
@@ -551,10 +559,10 @@ export const SiteHomePage: React.FC = () => {
                   </div>
                   <div className="text-left">
                     <span className="text-xs font-medium text-ink block leading-tight">
-                      Material received
+                      {t('home.material_received_trade', lang)}
                     </span>
                     <span className="text-[11px] text-muted leading-tight block">
-                      Record delivery if supervisor is not on site
+                      {t('home.material_received_trade_sub', lang)}
                     </span>
                   </div>
                 </div>
@@ -574,10 +582,10 @@ export const SiteHomePage: React.FC = () => {
                 </div>
                 <div className="text-left">
                   <span className="text-xs font-semibold text-ink block leading-tight">
-                    Report a problem
+                    {t('home.report_problem', lang)}
                   </span>
                   <span className="text-[11px] text-muted leading-tight block">
-                    Flag an issue or blocker
+                    {t('home.report_problem_sub', lang)}
                   </span>
                 </div>
               </div>
@@ -591,7 +599,7 @@ export const SiteHomePage: React.FC = () => {
       <section aria-label="Today's logs" className="space-y-2 pt-1">
         <div className="flex items-center justify-between px-1">
           <span className="text-[11px] uppercase tracking-wider text-muted font-semibold">
-            Today's logs
+            {t('home.todays_logs', lang)}
           </span>
           <span className="text-[11px] font-medium text-muted">
             {todayActivities.length} {todayActivities.length === 1 ? 'entry' : 'entries'}
@@ -623,9 +631,9 @@ export const SiteHomePage: React.FC = () => {
             ))
           ) : (
             <div className="py-4 text-center space-y-1">
-              <p className="text-xs font-medium text-ink">Nothing logged yet today</p>
+              <p className="text-xs font-medium text-ink">{t('home.nothing_logged', lang)}</p>
               <p className="text-[11px] text-muted">
-                Use the actions above to record what happened on site.
+                {t('home.nothing_logged_sub', lang)}
               </p>
             </div>
           )}

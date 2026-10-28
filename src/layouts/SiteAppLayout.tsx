@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Boxes, User, ArrowLeft, Monitor, LucideIcon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../utils/cn';
+import { getSiteLanguage, SiteLanguage, t } from '../utils/i18n';
 
 interface NavItem {
-  label: string;
+  key: string;
   to: string;
   icon: LucideIcon;
 }
 
 const BOTTOM_NAV_ITEMS: NavItem[] = [
-  { label: 'Home', to: '/app', icon: Home },
-  { label: 'Stock', to: '/app/stock', icon: Boxes },
-  { label: 'Me', to: '/app/me', icon: User },
+  { key: 'nav.home', to: '/app', icon: Home },
+  { key: 'nav.stock', to: '/app/stock', icon: Boxes },
+  { key: 'nav.me', to: '/app/me', icon: User },
 ];
 
 export const SiteAppLayout: React.FC = () => {
@@ -21,6 +22,13 @@ export const SiteAppLayout: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [deviceFrame, setDeviceFrame] = useState(true);
+  const [lang, setLang] = useState<SiteLanguage>(getSiteLanguage());
+
+  useEffect(() => {
+    const handleLang = () => setLang(getSiteLanguage());
+    window.addEventListener('studioos_language_change', handleLang);
+    return () => window.removeEventListener('studioos_language_change', handleLang);
+  }, []);
 
   // Check if we are on a nested subpage with back navigation
   const isSubpage = location.pathname !== '/app' && 
@@ -28,11 +36,11 @@ export const SiteAppLayout: React.FC = () => {
                     location.pathname !== '/app/me';
 
   const getSubpageTitle = () => {
-    if (location.pathname === '/app/received') return 'Material received';
-    if (location.pathname === '/app/used') return 'Material used';
-    if (location.pathname === '/app/progress') return 'Progress update';
-    if (location.pathname === '/app/problem') return 'Report problem';
-    if (location.pathname === '/app/stock-check') return 'Stock check';
+    if (location.pathname === '/app/received') return t('recv.title', lang);
+    if (location.pathname === '/app/used') return t('used.title', lang);
+    if (location.pathname === '/app/progress') return t('prog.title', lang);
+    if (location.pathname === '/app/problem') return t('prob.title', lang);
+    if (location.pathname === '/app/stock-check') return t('home.stock_check', lang);
     return 'Site Action';
   };
 
@@ -137,7 +145,7 @@ export const SiteAppLayout: React.FC = () => {
                     )}
                     strokeWidth={1.5}
                   />
-                  <span className="text-[11px] leading-none">{item.label}</span>
+                  <span className="text-[11px] leading-none">{t(item.key, lang)}</span>
                 </NavLink>
               );
             })}
