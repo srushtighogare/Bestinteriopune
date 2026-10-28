@@ -27,6 +27,7 @@ import { StockListPage } from '../pages/site/StockListPage';
 import { SiteMePage } from '../pages/site/SiteMePage';
 import { SiteLoginPage } from '../pages/site/SiteLoginPage';
 import { InviteOnboardingPage } from '../pages/site/InviteOnboardingPage';
+import { NotFoundPage } from '../pages/common/NotFoundPage';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -65,8 +66,8 @@ export const AppRoutes: React.FC = () => {
         </Route>
       </Route>
 
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      {/* 404 Not Found Page */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

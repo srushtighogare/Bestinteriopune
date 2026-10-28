@@ -780,7 +780,7 @@ export const ProjectSummaryPage: React.FC = () => {
           <div className="pt-6 border-t-2 border-dashed border-ink/20 space-y-8 break-before-page">
             <div className="flex items-center justify-between pb-2 border-b border-ink/10">
               <span className="text-xs uppercase font-bold tracking-wider text-muted">
-                Studio Internal Records &amp; Stock Operations
+                Internal: materials, stock and spend
               </span>
               <span className="text-xs text-muted">Confidential · Office &amp; Management Only</span>
             </div>
@@ -840,7 +840,7 @@ export const ProjectSummaryPage: React.FC = () => {
             <section className="space-y-3 break-inside-avoid">
               <div className="flex items-center justify-between">
                 <h3 className="font-serif text-lg font-semibold text-ink">
-                  6. Attention Stock at {project.name}
+                  6. Running low at this site
                 </h3>
                 <span className="text-xs text-muted">{attentionStock.length} items</span>
               </div>

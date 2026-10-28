@@ -892,7 +892,7 @@ export const InventoryPage: React.FC = () => {
                 Master Material Catalogue
               </h3>
               <p className="text-xs text-muted">
-                Manage categories, material specifications, default units, and reorder levels
+                Manage categories, material specifications, default units, and low-stock levels
               </p>
             </div>
 

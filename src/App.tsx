@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext';
 import { AppRoutes } from './routes';
 import { initializeStorage } from './services/storage';
+import { OfflineNotice } from './components/common/OfflineNotice';
+import { TitleManager } from './components/common/TitleManager';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,6 +26,8 @@ export const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
+          <TitleManager />
+          <OfflineNotice />
           <AppRoutes />
         </AuthProvider>
       </BrowserRouter>

@@ -9,8 +9,11 @@ import {
   ArrowUpRight, 
   Check, 
   Filter,
-  User as UserIcon
+  User as UserIcon,
+  X,
+  Eye
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { Issue, ProgressUpdate, Project, ScopeGridCell, TradeType } from '../../types';
 import { computeProjectProgress, computeRoomProgress, formatRelativeTime } from '../../utils/calculations';
 import { CellHistoryDrawer } from './CellHistoryDrawer';
@@ -72,12 +75,48 @@ export const RoomTradeGrid: React.FC<RoomTradeGridProps> = ({
     });
   }, [issues, issueFilter]);
 
-  const handleResolveIssue = async (issueId: string) => {
+  const { role } = useAuth();
+  const canManageCustomerAction = role === 'owner' || role === 'manager' || role === 'supervisor';
+  const [selectedIssueDetail, setSelectedIssueDetail] = useState<Issue | null>(null);
+
+  const handleToggleCustomerAction = async (issueId: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    const issue = issues.find(i => i.id === issueId);
+    if (!issue) return;
     try {
-      await progressService.resolveIssue(issueId);
+      const updated = await progressService.updateIssue(issueId, { needsCustomerAction: !issue.needsCustomerAction });
+      if (selectedIssueDetail && selectedIssueDetail.id === issueId && updated) {
+        setSelectedIssueDetail(updated);
+      }
+      onDataRefresh();
+    } catch (err) {
+      console.error('Failed to update customer action status:', err);
+    }
+  };
+
+  const handleResolveIssue = async (issueId: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    try {
+      const resolved = await progressService.resolveIssue(issueId);
+      if (selectedIssueDetail && selectedIssueDetail.id === issueId && resolved) {
+        setSelectedIssueDetail(resolved);
+      }
       onDataRefresh();
     } catch (err) {
       console.error('Failed to resolve issue:', err);
+    }
+  };
+
+  const handleReopenIssue = async (issueId: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    try {
+      const reopened = await progressService.updateIssue(issueId, { status: 'open', resolvedAt: undefined });
+      if (selectedIssueDetail && selectedIssueDetail.id === issueId && reopened) {
+        setSelectedIssueDetail(reopened);
+      }
+      onDataRefresh();
+    } catch (err) {
+      console.error('Failed to reopen issue:', err);
     }
   };
 
@@ -420,7 +459,8 @@ export const RoomTradeGrid: React.FC<RoomTradeGridProps> = ({
                 return (
                   <div
                     key={issue.id}
-                    className={`p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 ${
+                    onClick={() => setSelectedIssueDetail(issue)}
+                    className={`p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 cursor-pointer hover:shadow-xs ${
                       isOpen 
                         ? 'bg-amber-soft/30 border-amber/30 hover:border-amber/50' 
                         : 'bg-paper border-line hover:border-sand-dark'
@@ -449,28 +489,68 @@ export const RoomTradeGrid: React.FC<RoomTradeGridProps> = ({
                             {issue.roomName}
                           </span>
                         )}
+
+                        {(issue.needsCustomerAction || issue.type === 'design_question') && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-soft text-amber border border-amber/40">
+                            Customer action
+                          </span>
+                        )}
                       </div>
 
                       <p className="text-xs text-ink font-medium leading-relaxed">
                         {issue.description}
                       </p>
 
-                      <div className="flex items-center gap-3 text-[11px] text-muted">
+                      <div className="flex flex-wrap items-center gap-3 text-[11px] text-muted">
                         <span>Reported by {issue.reportedBy}</span>
                         <span>·</span>
                         <span>{formatRelativeTime(issue.reportedAt)}</span>
+                        {issue.photoUrl && (
+                          <>
+                            <span>·</span>
+                            <span className="inline-flex items-center gap-1 text-olive">
+                              <Camera className="w-3 h-3" />
+                              <span>Photo attached</span>
+                            </span>
+                          </>
+                        )}
                       </div>
                     </div>
 
-                    {isOpen && (
-                      <button
-                        type="button"
-                        onClick={() => handleResolveIssue(issue.id)}
-                        className="px-3 py-1.5 rounded-lg border border-line bg-paper text-xs font-medium text-ink hover:bg-olive-soft hover:text-olive hover:border-olive/30 transition-all shrink-0 self-start sm:self-center"
-                      >
-                        Mark resolved
-                      </button>
-                    )}
+                    <div className="flex items-center gap-2 shrink-0 self-start sm:self-center" onClick={(e) => e.stopPropagation()}>
+                      {canManageCustomerAction && (
+                        <button
+                          type="button"
+                          onClick={(e) => handleToggleCustomerAction(issue.id, e)}
+                          className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                            issue.needsCustomerAction
+                              ? 'bg-amber-soft text-amber border-amber/40 hover:bg-amber-soft/80'
+                              : 'bg-paper text-muted border-line hover:text-ink hover:border-sand-dark'
+                          }`}
+                          title="Toggle whether this issue requires customer action on the summary sheet"
+                        >
+                          {issue.needsCustomerAction ? '✓ Customer action' : '+ Customer action'}
+                        </button>
+                      )}
+
+                      {isOpen ? (
+                        <button
+                          type="button"
+                          onClick={(e) => handleResolveIssue(issue.id, e)}
+                          className="px-3 py-1.5 rounded-lg border border-line bg-paper text-xs font-medium text-ink hover:bg-olive-soft hover:text-olive hover:border-olive/30 transition-all"
+                        >
+                          Mark resolved
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={(e) => handleReopenIssue(issue.id, e)}
+                          className="px-3 py-1.5 rounded-lg border border-line bg-paper text-xs font-medium text-muted hover:text-ink transition-all"
+                        >
+                          Reopen
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })
@@ -501,6 +581,148 @@ export const RoomTradeGrid: React.FC<RoomTradeGridProps> = ({
             });
           }}
         />
+      )}
+
+      {/* Issue Detail Modal */}
+      {selectedIssueDetail && (
+        <div className="fixed inset-0 z-50 bg-ink/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="relative max-w-lg w-full bg-paper rounded-2xl border border-line shadow-card p-6 space-y-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="font-serif text-lg font-semibold text-ink">Issue Details</span>
+                {selectedIssueDetail.status === 'open' ? (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber text-paper">
+                    Open
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-olive-soft text-olive">
+                    Resolved
+                  </span>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedIssueDetail(null)}
+                className="w-8 h-8 rounded-full border border-line flex items-center justify-center text-muted hover:text-ink hover:bg-sand/30 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Meta strip */}
+              <div className="p-3.5 rounded-xl bg-ivory border border-line grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <span className="text-[10px] uppercase font-semibold text-muted block">Room / Area</span>
+                  <span className="font-semibold text-ink mt-0.5 block">
+                    {selectedIssueDetail.roomName || 'Entire site / General'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-semibold text-muted block">Issue Type</span>
+                  <span className="font-semibold text-ink mt-0.5 block capitalize">
+                    {selectedIssueDetail.type.replace('_', ' ')}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-semibold text-muted block">Reported By</span>
+                  <span className="text-ink mt-0.5 block">{selectedIssueDetail.reportedBy}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-semibold text-muted block">Reported At</span>
+                  <span className="text-ink mt-0.5 block">
+                    {new Date(selectedIssueDetail.reportedAt).toLocaleDateString('en-IN', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                  </span>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="space-y-1">
+                <label className="text-[10px] uppercase font-semibold text-muted block">
+                  Description
+                </label>
+                <p className="text-xs text-ink leading-relaxed p-3.5 rounded-xl bg-paper border border-line">
+                  {selectedIssueDetail.description}
+                </p>
+              </div>
+
+              {/* Photo attachment if present */}
+              {selectedIssueDetail.photoUrl && (
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-semibold text-muted block">
+                    Site Photo Attachment
+                  </label>
+                  <div 
+                    onClick={() => setSelectedPhoto(selectedIssueDetail.photoUrl || null)}
+                    className="relative aspect-video rounded-xl overflow-hidden border border-line bg-sand/20 cursor-pointer group"
+                  >
+                    <img
+                      src={selectedIssueDetail.photoUrl}
+                      alt="Issue attachment"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                    <div className="absolute inset-0 bg-ink/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-paper text-xs font-medium">
+                      Click to expand
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Customer Action Needed Toggle for Owner, Manager, Supervisor */}
+              {canManageCustomerAction && (
+                <label className="flex items-start gap-3 p-3.5 rounded-xl border border-line bg-ivory cursor-pointer hover:bg-sand/20 transition-colors">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(selectedIssueDetail.needsCustomerAction)}
+                    onChange={() => handleToggleCustomerAction(selectedIssueDetail.id)}
+                    className="mt-0.5 w-4 h-4 rounded border-line text-ink focus:ring-ink"
+                  />
+                  <div className="space-y-0.5">
+                    <span className="text-xs font-semibold text-ink block">
+                      Customer action needed
+                    </span>
+                    <span className="text-[11px] text-muted block leading-snug">
+                      When checked, this issue appears on customer-facing summary sheets to track client decisions and approvals.
+                    </span>
+                  </div>
+                </label>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="pt-2 border-t border-line flex items-center justify-between gap-3">
+              {selectedIssueDetail.status === 'open' ? (
+                <button
+                  type="button"
+                  onClick={() => handleResolveIssue(selectedIssueDetail.id)}
+                  className="px-4 py-2 rounded-xl bg-olive-soft text-olive font-semibold text-xs border border-olive/30 hover:bg-olive hover:text-paper transition-all"
+                >
+                  Mark as resolved
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleReopenIssue(selectedIssueDetail.id)}
+                  className="px-4 py-2 rounded-xl bg-sand/40 text-ink font-semibold text-xs border border-line hover:bg-sand transition-all"
+                >
+                  Reopen issue
+                </button>
+              )}
+
+              <button
+                type="button"
+                onClick={() => setSelectedIssueDetail(null)}
+                className="px-4 py-2 rounded-xl bg-ink text-paper text-xs font-semibold hover:bg-ink-2 transition-all"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Photo Lightbox */}
