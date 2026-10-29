@@ -22,7 +22,7 @@ export const OfflineNotice: React.FC = () => {
   return (
     <div className="fixed top-0 left-0 right-0 z-100 bg-rust text-paper px-4 py-2 text-center text-xs font-medium shadow-md flex items-center justify-center gap-2 animate-in fade-in duration-200 print:hidden">
       <WifiOff className="w-3.5 h-3.5 shrink-0" />
-      <span>You're offline — your entry will be ready to send when you're back online</span>
+      <span>You're offline. Connect to the internet to send entries.</span>
     </div>
   );
 };
