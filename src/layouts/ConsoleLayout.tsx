@@ -46,14 +46,12 @@ export const ConsoleLayout: React.FC = () => {
           <span className="font-serif text-lg font-medium text-ink">Bestinterio</span>
         </div>
         <div className="flex items-center gap-2">
-          {isDemoMode && (
-            <button
-              onClick={() => navigate('/app')}
-              className="text-[11px] text-muted hover:text-ink px-2 py-1 transition-colors"
-            >
-              Site app →
-            </button>
-          )}
+          <button
+            onClick={() => navigate('/app')}
+            className="text-xs text-muted hover:text-ink px-2 py-1 transition-colors font-medium"
+          >
+            Site app →
+          </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 text-ink-2 hover:text-ink rounded-lg focus:outline-none"
@@ -123,17 +121,15 @@ export const ConsoleLayout: React.FC = () => {
           })}
         </nav>
 
-        {/* Demo-only quiet switch link */}
-        {isDemoMode && (
-          <div className="px-5 py-2.5 border-t border-line/40">
-            <button
-              onClick={() => navigate('/app')}
-              className="text-[11px] text-muted/70 hover:text-ink transition-colors flex items-center gap-1.5"
-            >
-              <span>Switch to site app (demo) →</span>
-            </button>
-          </div>
-        )}
+        {/* Switch to site app link */}
+        <div className="px-5 py-2.5 border-t border-line/40">
+          <button
+            onClick={() => navigate('/app')}
+            className="text-xs text-muted hover:text-ink transition-colors flex items-center gap-1.5 font-medium"
+          >
+            <span>Open Site App (Mobile) →</span>
+          </button>
+        </div>
 
         {/* User profile at bottom */}
         <div className="p-3 border-t border-line bg-paper/80">

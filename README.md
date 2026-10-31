@@ -81,11 +81,11 @@ Both the Console Login and Site App Login feature a **"Demo: sign in as…"** qu
 ### 2. Site App Logins (Phone + 4-digit PIN)
 | Name | Role / Trade | Phone | 4-Digit PIN | Assigned Sites |
 |---|---|---|---|---|
-| **Rajiv Deshmukh** | Site Supervisor | `9822011223` | `4826` | Mehta Residence, Baner Penthouse, Kharadi Villa |
-| **Gurmukh Singh** | Carpenter (Lead) | `9822033445` | `3719` | Mehta Residence |
-| **Ramesh Sutar** | Carpenter | `9822044556` | `5820` | Baner Penthouse |
-| **Pravin Shinde** | Electrician (Lead) | `9822055667` | `2941` | Mehta Residence |
-| **Santosh Yadav** | Painter | `9822066778` | `8314` | Baner Penthouse |
+| **Rajiv Deshmukh** | Site Supervisor | `9850011223` | `1234` | Mehta Residence, Baner Penthouse, Kharadi Villa |
+| **Gurmukh Singh** | Carpenter (Lead) | `9850022334` | `1472` | Mehta Residence, Baner Penthouse |
+| **Imran Shaikh** | Electrician (Lead) | `9850033445` | `2580` | Mehta Residence, Kharadi Office |
+| **Santosh Pawar** | Civil | `9850044556` | `3691` | Baner Penthouse |
+| **Arun Shinde** | Deactivated Member (Test) | `9850099999` | `8888` | Demonstrates access revocation |
 
 > **Security Demo**:
 > - Entering PIN `9999` demonstrates the 5-attempt lockout security screen.
